@@ -281,7 +281,7 @@
       %ul
         - (@library.users.all + User::where('is_admin = 1').all).sort_by(&:username).each do |user|
           %li
-            - if user.is_admin == 1
+            - if user.is_admin?
               %span{:style => 'color: red;'}= h user.username
             - else
               %strong= h user.username
