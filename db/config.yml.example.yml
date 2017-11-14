@@ -1,0 +1,18 @@
+development: &development
+  adapter: mysql2
+  encoding: utf8
+  database: librarydata
+  username: username
+  password: password
+
+production:
+  <<: *development
+
+test:
+  adapter: mysql2
+  encoding: utf8
+  database: librarydata_test
+  username: username
+  password: password
+
+session_secret: changeme

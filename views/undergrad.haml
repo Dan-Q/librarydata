@@ -1,0 +1,73 @@
+
+= "<!--cms start-->"
+
+#undergrad_widget{:style => 'display: none;'}
+  #college_and_course
+    %p
+      Please select your course and college from the menus below. Then press 'Search' to
+      find out which libraries hold the most reading material for your course.
+
+    %div{'data-role' => 'fieldcontain'}
+      %label{:for => 'undergrad_widget_college'} College:
+      %select{:id => 'undergrad_widget_college'}
+        %option{:value => '', :selected => 'selected'}
+        - @colleges.each do |college|
+          %option{:value => college.id}= h(college.name)
+    %div{'data-role' => 'fieldcontain'}
+      %label{:for => 'undergrad_widget_course'} Course:
+      %select{:id => 'undergrad_widget_course'}
+        %option{:value => '', :selected => 'selected'}
+        - @courses.each do |course|
+          %option{:value => course.id}= h(course.name)
+
+    %div
+      %a#undergrad_widget_submit{:href => '#', 'data-role' => 'button'} Search
+
+  #result
+    %p
+      The libraries likely to contain most books relevant to you are given below.
+      Please click the button for more information about the library.
+
+    %h3 Your Libraries
+
+    #undergrad_widget_result{'data-role' => 'controlgroup'}
+      - @colleges.select{|c| c.library}.each do |college|
+        %a{:href => "/libraries/#{college.library.id}.mobile", :class => "result college#{college.id}", 'data-role' => 'button'}= h(college.library.Name)
+      - @courses.each do |course|
+        - course.libraries.each do |library|
+          %a{:href => "/libraries/#{library.id}.mobile", :class => "result course#{course.id}", 'data-role' => 'button'}= h(library.Name)
+
+    %div
+      %a#undergrad_widget_reset{:href => '#', 'data-role' => 'button'} Back
+
+#undergrad_widget_no_js
+  %p{:style => 'color: red;'} Javascript is required to use this tool.
+
+:javascript
+  function reset_undergrad_widget(){
+    $('#college_and_course').show();
+    $('#result').hide();
+    return false;
+  }
+
+  function update_undergrad_widget_result(){
+    var college = $('#undergrad_widget_college').val();
+    var course = $('#undergrad_widget_course').val();
+    $('#undergrad_widget_result .result').hide();
+    if(college != '' && course != '') {
+      $('#undergrad_widget_result .college'+college+', #undergrad_widget_result .course'+course).show();
+      $('#college_and_course').hide();
+      $('#result').show();
+      //$('#undergrad_widget_result').controlgroup('refresh');
+    }
+    return false;
+  }
+
+  $(function(){
+    $('#undergrad_widget_submit').click(update_undergrad_widget_result);
+    $('#undergrad_widget_reset').click(reset_undergrad_widget);
+    $('#undergrad_widget_no_js, #undergrad_widget').toggle();
+    reset_undergrad_widget();
+  });
+
+= "<!--cms end-->"

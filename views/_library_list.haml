@@ -1,0 +1,47 @@
+.list.library-list
+  - @letters.each do |letter|
+    .group
+      %p
+      %h2
+        %a{:name => letter}= letter
+      %dl
+        - @libraries.select{|l| l.name[0,1] == letter}.each do |library|
+          %dl.list.library{:data => { :id => (library.is_a?(Site) ? library.libraries.first.id : library.id), :site => (library.is_a?(Site) ? 'true' : 'false'), :class => library.class.name }}
+            - if library.is_a?(Site)
+              %a{:name => "S#{library.id}"}
+              = h library.name
+              %a.information{:href => library.libraries.first.url} Information
+              - if inner_library = library.libraries.where("Website IS NOT NULL AND Website <> ''").first
+                |
+                %a.website{:href => no_quotes(inner_library.website)} Website
+            - elsif library.is_a?(Library) # && (library.calculate_library_institution_name <= 2)
+              - if site = library.site && !@cross_references_as_links
+                = h library.name
+                = "(see <a href=\"#S#{library.site_id}\">#{library.site.name}</a>)"
+              - else
+                %a{:name => "L#{library.id}"}
+                = h library.name
+                %a.information{:href => "#{library.url}#L#{library.id}"} Information
+                - unless library.website.blank?
+                  |
+                  %a.website{:href => no_quotes(library.website)} Website
+
+              - if @me && @me.can_edit?(library)
+                |
+                %a.edit{:href => library.url + '/edit'} Edit
+
+            - elsif library.is_a?(AlternativeName) && (actual_library = @libraries.select{|l| l.is_a?(Library) && l.id == library.library_id}.first) && (actual_library.calculate_library_institution_name <= 2)
+              - if @cross_references_as_links
+                %a{:name => "L#{actual_library.id}"}
+                = h library.name
+                %a.information{:href => actual_library.url, :data => { :class => actual_library.class.name, :id => actual_library.id }} Information
+                - unless actual_library.website.blank?
+                  |
+                  %a.website{:href => no_quotes(actual_library.website)} Website
+              - else
+                = h library.name
+                = "(see <a href=\"#L#{library.library_id}\">#{actual_library.name}</a>)"
+
+              - if @me && @me.can_edit?(actual_library)
+                |
+                %a.edit{:href => actual_library.url + '/edit'} Edit

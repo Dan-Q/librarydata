@@ -1,0 +1,40 @@
+%h2.title
+  Edit Course
+
+%form{:method => 'post', :action => "/courses/#{@course.id}"}
+  #tabs
+    %ul
+      %li
+        %a{:href => '#tab_course'} Course
+      %li
+        %a{:href => '#tab_libraries'} Libraries
+    
+    #tab_course
+      %p.field
+        %label{:for => 'course_name'} Name:
+        %input{:type => 'text', :name => 'course[name]', :value => @course.name}
+
+    #tab_libraries
+      %p.field
+        Check
+        %em only
+        the libraries to which undergraduate students of this course in particular would be recommended.
+
+      %ul#courses_list
+        - Library::all.each do |library|
+          %li
+            %input{:type => 'hidden', :name => "library[#{library.id}]", :value => '0'}
+            - if library.covers_course?(@course)
+              %input{:type => 'checkbox', :name => "library[#{library.id}]", :id => "library_#{library.id}", :value => '1', :checked => 'checked'}
+            - else
+              %input{:type => 'checkbox', :name => "library[#{library.id}]", :id => "library_#{library.id}", :value => '1'}
+            %label{:for => "library_#{library.id}"}= h library.Name
+
+      %p.field
+
+  %p
+    %input{:type => 'submit', :value => 'Save Changes', :class => 'button'}
+
+%form{:method => 'post', :action => "/courses/#{@course.id}/delete"}
+  %p
+    %input{:type => 'submit', :class => 'button', :value => 'Delete'}

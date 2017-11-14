@@ -1,0 +1,250 @@
+- @library = library if (library ||= nil)
+%p.alt_formats
+  Alternate formats:
+  %a{:href => @library.url(:xml)} XML
+  |
+  %a{:href => @library.url(:json)} JSON
+  |
+  %a{:href => @library.url(:kml)} KML
+  |
+  %a{:href => @library.url(:gmaps)} GMaps
+  |
+  %a{:href => @library.url(:js)} GMaps JS
+  |
+  %a{:href => @library.url(:mobile)} Mobile
+
+- if @me && @me.can_edit?(@library)
+  %p
+    You can
+    %a{:href => "/libraries/#{@library.id}/edit"} edit this library
+
+:javascript
+  $(function(){
+    $('.new_cms_only').hide();
+  });
+
+= "<!--new cms start-->"
+%h1#main_header.new_cms_only
+  %a{:name => "L#{@library.id}"}
+  = h @library.Name
+
+:javascript
+  $(function(){
+    $('.old_cms_only').hide();
+  });
+
+= "<!--cms start-->"
+
+%h2#main_header.old_cms_only
+  %a{:name => "L#{@library.id}"}
+  = h @library.Name
+
+- # %p= @library.alternative_names_html
+
+#anchor_links{:style => 'margin: 0 0 1em'}
+  %center
+    %a{:href => '#contact'} Contact
+    |
+    - if @show_social_networks
+      %a{:href => '#social'} Social Networks
+      |
+    %a{:href => '#staff'} Staff
+    |
+    %a{:href => '#hours'} Opening Hours
+    |
+    %a{:href => '#admissions'} Policies
+    |
+    %a{:href => '#hours'} Opening Hours
+
+
+#contentPool
+  #Xcontact.groupsection
+    %h3
+      %a{:name => 'contact'} Contact
+    .section
+
+      %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2, :summary => "layout table. The first column contains headings, the second column contains the information."}
+        %tr{:valign => 'top'}
+          %th{:width => '18%'}
+            %p Address:
+          %td
+            %p= @library.address_lines.collect{|a|h(a)}.join('<br />')
+
+        - unless @library.Telephone.blank?
+          %tr{:valign => 'top'}
+            %th{:width => '18%'}
+              %p Phone:
+            %td
+              %p= h @library.Telephone
+
+        - unless @library.Fax.blank?
+          %tr{:valign => 'top'}
+            %th{:width => '18%'}
+              %p Fax:
+            %td
+              %p= h @library.Fax
+
+        - unless @library.Email.blank?
+          %tr{:valign => 'top'}
+            %th{:width => '18%'}
+              %p E-mail:
+            %td
+              %p= h @library.Email
+
+        - unless @library.Website.blank?
+          %tr{:valign => 'top'}
+            %th{:width => '18%'}
+              %p Website:
+            %td
+              %p
+                %a{:href => no_quotes(@library.Website)}= h(@library.Website)
+
+  - if @show_social_networks
+    #Xsocial.groupsection
+      %h3
+        %a{:name => 'social'} Social Networks
+      .section
+
+        %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2, :summary => "layout table. The first column contains headings, the second column contains the information."}
+          - unless @library.Facebook.blank?
+            %tr{:valign => 'top'}
+              %th{:width => '18%'}
+                %p Facebook:
+              %td
+                %p
+                  %a{:href => @library.Facebook}= h @library.Facebook
+
+          - unless @library.Twitter.blank?
+            %tr{:valign => 'top'}
+              %th{:width => '18%'}
+                %p Twitter:
+              %td
+                %p
+                  %a{:href => "http://twitter.com/#{h(@library.Twitter)}"}= h "@#{@library.Twitter}"
+
+          - unless @library.Blog.blank?
+            %tr{:valign => 'top'}
+              %th{:width => '18%'}
+                %p Blog:
+              %td
+                %p
+                  %a{:href => @library.Blog}= h(@library.Blog)
+
+          - unless @library.LibraryThing.blank?
+            %tr{:valign => 'top'}
+              %th{:width => '18%'}
+                %p LibraryThing:
+              %td
+                %p
+                  %a{:href => @library.LibraryThing}= h(@library.LibraryThing)
+
+          - unless @library.Delicious.blank?
+            %tr{:valign => 'top'}
+              %th{:width => '18%'}
+                %p Delicious:
+              %td
+                %p
+                  %a{:href => "http://del.icio.us/#{h(@library.Delicious)}"}= h @library.Delicious
+
+  #Xstaff.groupsection
+    %h3
+      %a{:name => 'staff'} Library Staff
+    .section
+    
+      - @library.staffs.all.each do |staff|
+        %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2, :summary => "layout table. The first column contains headings, the second column contains the information."}
+          %tr{:valign => 'top'}
+            %th{:width => '18%'}
+              %p= h "#{staff.JobTitle}:"
+            %td
+              %p= h staff.NameOfPerson
+
+  #Xhours.groupsection
+    %h3
+      %a{:name => 'hours'} Opening Hours
+    .section
+    
+      %p
+        Note that opening hours may sometimes change at short notice.
+        If travelling to visit a library you are advised to check with the library to confirm details.
+
+      %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2, :summary => "layout table. The first column contains headings, the second column contains the information."}
+        %tr{:valign => 'top'}
+          %th{:width => '18%'}
+            %p Term time:
+          %td
+            %p= @library.TermHours.blank? ? '<em>[Library has not supplied this information]</em>' : h(@library.TermHours)
+
+      %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2, :summary => "layout table. The first column contains headings, the second column contains the information."}
+        %tr{:valign => 'top'}
+          %th{:width => '18%'}
+            %p Vacation:
+          %td
+            %p= @library.VacationHours.blank? ? '<em>[Library has not supplied this information]</em>' : h(@library.VacationHours)
+
+      %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2, :summary => "layout table. The first column contains headings, the second column contains the information."}
+        %tr{:valign => 'top'}
+          %th{:width => '18%'}
+            %p Closed:
+          %td
+            %p= @library.ClosedPeriods.blank? ? '<em>[Library has not supplied this information]</em>' : h(@library.ClosedPeriods)
+
+      - unless @library.HoursNotes.blank?
+        %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2, :summary => "layout table. The first column contains headings, the second column contains the information."}
+          %tr{:valign => 'top'}
+            %th{:width => '18%'}
+              %p Notes:
+            %td
+              %p= h @library.HoursNotes
+
+  #Xadmissions.groupsection
+    %h3
+      %a{:name => 'admissions'} Admission and Borrowing Policies
+    .section
+    
+      %p
+        Note that by necessity these policies are much simplified and provided for initial guidance only.
+        Please check with the library for full details.
+
+      %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2, :summary => "layout table. The first column contains headings, the second column contains the information."}
+        %tr{:valign => 'top'}
+          %th{:width => '18%'}
+            %p OU undergraduate students:
+          %td
+            %p
+              = @library.borrowing_policies_html('UG')
+
+        %tr{:valign => 'top'}
+          %th{:width => '18%'}
+            %p OU postgraduate students:
+          %td
+            %p
+              = @library.borrowing_policies_html('PG')
+
+        %tr{:valign => 'top'}
+          %th{:width => '18%'}
+            %p OU academic and research staff:
+          %td
+            %p
+              = @library.borrowing_policies_html('Academic')
+
+        %tr{:valign => 'top'}
+          %th{:width => '18%'}
+            %p Others:
+          %td
+            %p
+              = @library.borrowing_policies_html('Other')
+
+  #Xsubjects.groupsection
+    %h3
+      %a{:name => 'subjects'} Subjects Covered
+    .section
+    
+      %p= h @library.SubjectNotes
+      
+      - # %p
+      - #   This library is indexed under:
+      - #   = h @library.subjects.all.uniq.collect{|s| s.Subject}.join('; ')
+
+= "<!--new cms end-->"
+= "<!--cms end-->"

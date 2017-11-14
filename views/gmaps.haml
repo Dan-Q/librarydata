@@ -1,0 +1,26 @@
+:css
+  html { height: 100% }
+  body { height: 100%; margin: 0; padding: 0 }
+  #map_canvas { height: 100% }
+
+// %script{:type => "text/javascript", :src => "https://maps.googleapis.com/maps/api/js?key=AIzaSyBtgxMIN-8j798f7NPvuaTQa_nVf5i9WWQ&sensor=false"}
+%script{:type => "text/javascript", :src => @js_url}
+
+%p
+  You can embed this map on your own pages. Simply add:
+%ol
+  %li
+    %code
+      &lt;div id="library_map" style="width: 300px; height: 240px;"&gt;&lt;/div&gt
+    %em (the id is important!)
+  %li
+    a
+    %code &lt;script&gt;
+    tag calling the Google Maps API, and
+  %li
+    %code
+      &lt;script type="text/javascript" src="
+      %a{:href => "http://librarydata.bodleian.ox.ac.uk#{@js_url}"}>= "http://librarydata.bodleian.ox.ac.uk#{@js_url}"
+      "&gt;&lt;/script&gt;
+
+#library_map{:style => "width:100%; height:100%"}

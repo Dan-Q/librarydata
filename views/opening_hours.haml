@@ -1,0 +1,107 @@
+%p.alt_formats
+  Alternate formats:
+  %a{:href => '/libraries.xml'} XML
+  |
+  %a{:href => '/libraries.json'} JSON
+  |
+  %a{:href => '/libraries.kml'} KML
+
+= "<!--cms start-->"
+= haml :hide_main_header
+
+= "<!--new cms start-->"
+%h1#main_header Opening Hours
+
+:css
+  h2.index_letter {
+    clear: both;
+  }
+  .groupsection {
+    padding: 0.5em 0 1.5em;
+  }
+  h3.library_name {
+    float: left;
+    clear: left;
+    height: 2em;
+    width: 31em;
+    padding-top: 0.5em;
+  }
+  .library_links {
+    float: right;
+    padding-top: 0.5em;
+  }
+  .openinghours {
+    clear: left;
+  }
+  .openinghours div {
+    margin: 0.5em 0;
+    clear: left;
+    height: auto;
+  }
+  .openinghours div h4 {
+    float: left;
+    clear: left;
+    display: inline-block;
+    width: 8em;
+    padding-right: 0.5em;
+    text-align: right;
+  }
+  .openinghours div span {
+    float: left;
+    display: inline-block;
+    width: 30em;
+    padding: 0 0 1em;
+  }
+
+%p
+  This page lists opening hours for all of the libraries associated with the University of Oxford,
+  ordered alphabetically by library name.
+  Many libraries have separate term-time and vacation opening hours.
+  During term this page lists term-time opening hours and during vacation it lists the vacation opening hours.
+%p
+  Please note that admission and borrowing policies apply and may differ from library to library.
+  Please consult the information page for the library in which you are interested for full details.
+
+%p
+  - if @term
+    = h("It is currently #{@term.name} (#{@term.start_date.strftime('%-d %B %Y')} to #{@term.end_date.strftime('%-d %B %Y')})")
+  - else
+    It is currently vacation.
+    = h("#{@next.name} starts on #{@next.start_date.strftime('%-d %B %Y')}.") if @next
+
+#auto_anchor_links{'data-auto-anchor-links' => 'h2'}
+#largelist
+  - @letters.each do |letter|
+    %h2.index_letter= letter
+
+    - @libraries.select{|l| l.name[0,1] == letter}.each do |library|
+      .groupsection
+        %h3.library_name= h library.name
+        .library_links
+          %a{:href => library.url} Information
+          - unless library.website.blank?
+            |
+            %a{:href => no_quotes(library.website)} Website
+        .openinghours
+          - unless library.term_hours.nil? || library.term_hours.strip.blank?
+            .term_hours
+              %h4 Term hours:
+              %span.term_hours_content= h library.term_hours
+          - unless library.vacation_hours.nil? || library.vacation_hours.strip.blank?
+            .vacation_hours
+              %h4 Vacation hours:
+              %span.vacation_hours_content= h library.vacation_hours
+          - unless library.closed_periods.nil? || library.closed_periods.strip.blank?
+            .closed_periods
+              %h4 Closed:
+              %span.closed_periods_content= h library.closed_periods
+          - unless library.hours_notes.nil? || library.hours_notes.strip.blank?
+            .hours_notes
+              %h4 Notes:
+              %span.hours_notes_content= h library.hours_notes
+
+    -# %p{:style => 'text-align: right; clear: both;'}
+    -#   %a{:href => '#top'} Back to top
+
+= "<!--new cms end-->"
+= "<!--cms end-->"

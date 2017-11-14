@@ -1,0 +1,79 @@
+%p.alt_formats
+  Alternate formats:
+  %a{:href => "/group/#{h(@group)}/list.xml"} XML
+  |
+  %a{:href => "/group/#{h(@group)}/list.json"} JSON
+  |
+  %a{:href => "/group/#{h(@group)}/list.kml"} KML
+
+= "<!--cms start-->"
+= haml :hide_main_header
+= "<!--new cms start-->"
+
+- if @group == 'bodleian'
+  %h1#main_header Bodleian Libraries
+  %p
+    This is a list of libraries within the Bodleian Libraries group. Admission policies vary between libraries,
+    with details available from individual information pages or website links.
+- elsif @group == 'college'
+  %h1#main_header College Libraries
+  %p
+    Should a college library hold something that is genuinely not available in the University's libraries, then
+    it will normally admit readers who are not members of its college. Such admittance is
+    %strong only by prior arrangement with the college librarian.
+    Contact should be made in advance by letter, e-mail, or telephone; if readers "just turn up" they are
+    unlikely to be admitted.
+  %p
+    %strong Use of material by external readers is on a reference basis.
+    Borrowing may be permitted in exceptional circumstances at the discretion of library staff. If copies of the
+    item are held in a University, faculty or departmental library, readers should seek it there. All Bodleian
+    readers may
+    %a{:href => 'http://www.bodleian.ox.ac.uk/subjects-and-libraries/recommendations'} recommend a book
+    for purchase, and students may also ask their own college librarian.
+  %p
+    Enquirers should search all relevant catalogues to ensure the items they require really are unique to that
+    college; college librarians often find supposedly unique holdings of theirs (particularly pre-20th century
+    material) are in reality duplicated many times over in the Bodleian Libraries' collections.
+  %p
+    Most college libraries offer collections and services tailored to the needs of members of their respective
+    colleges, typically offering long opening hours and generous lending. While most do not normally admit
+    non-members, there are a few exceptions: some graduate college libraries with special subject strengths,
+    such as Nuffield and All Souls, do admit some categories of non-members on application. Many college
+    libraries also have historic or specialised research collections. These may be consulted by external readers
+    by making an appointment with the librarian. Readers are therefore advised to consult the relevant web pages
+    for details of admission policies.
+  %p{:style => 'text-align: right;'}
+    \- Committee of College Librarians, Trinity Term 2013
+- elsif @group == 'other'
+  %h1#main_header Other University Libraries
+
+:css
+  .list a {
+    color:black;
+    text-decoration: none;
+  }
+
+  .list a:link {
+    color: #3458a7;
+    text-decoration: underline;
+  }
+
+  .list a:visited {
+    color: #3458a7;
+    text-decoration: underline;
+  }
+
+  .list a:hover {
+    color: #3458a7;
+    text-decoration: underline;
+  }
+
+#anchor_links
+  %center
+    - @letters.each do |letter|
+      %a{:href => "##{letter}"}= letter
+
+= haml File::read('views/_library_list.haml')
+
+= "<!--new cms end-->"
+= "<!--cms end-->"

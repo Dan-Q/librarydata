@@ -1,0 +1,24 @@
+= "<!--new cms start-->"
+
+%h1#title= h @site.Name
+
+= "<!--cms start-->"
+
+%p= @site.alternative_names_html
+
+%p
+  There are
+  = @site.libraries.count
+  sections to this library:
+  = @site.library_links_html
+
+- @site.libraries.each do |library|    
+  = haml :library, :locals => { 'library' => library }
+
+:javascript
+  $(function(){
+    $('.new_cms_only').show();
+  });
+
+= "<!--new cms end-->"
+= "<!--cms end-->"

@@ -1,0 +1,335 @@
+%h2.title
+  %a{:name => "L#{@library.id}"}= h "Edit #{@library.name}"
+
+%form{:method => 'post', :action => "/libraries/#{@library.id}/edit"}
+  #tabs
+    %ul
+      %li
+        %a{:href => '#tab_name'} Name
+      %li
+        %a{:href => '#tab_administration'} Administration
+      %li
+        %a{:href => '#tab_contact'} Contact
+      %li
+        %a{:href => '#tab_hours'} Hours
+      %li
+        %a{:href => '#tab_policies'} Policies
+      %li
+        %a{:href => '#tab_social'} Social
+      %li
+        %a{:href => '#tab_staff'} Staff
+      %li
+        %a{:href => '#tab_subjects'} Subjects
+      - if @me.is_admin?
+        %li
+          %a{:href => '#tab_courses', :class => 'admin'} Courses
+        %li
+          %a{:href => '#tab_location', :class => 'admin'} Location
+      %li
+        %a{:href => '#tab_editors'} Editors
+      %li
+        %a{:href => '#tab_style'} Style Guidelines
+    
+    #tab_name
+      %p.field
+        %label{:for => 'library_name'} Name:
+        %span.input= h @library.name
+      %p.field
+        %label{:for => 'library_site_name'} Site:
+        %span.input
+          - if @library.site
+            = h(@library.site.name)
+            %br/
+            = "(comprising #{@library.site.library_edit_links_html})"
+          - else
+            &mdash;
+      %p.field
+        %label{:for => 'library_alt_names'} Alternative Names:
+        %span.input
+          - if @library.alternative_names.empty?
+            &mdash;
+          - else
+            = @library.alternative_names.all.collect(&:name).join('<br />')
+
+      %p.field
+        If you need to edit any of this information, please contact a service administrator.
+  
+    #tab_administration
+      = library_edit_field(@library, 'admin_name', 'Contact Name', :style => 'width: 400px;')
+      = library_edit_field(@library, 'admin_email', 'Contact Email', :tip => 'Separate multiple email addresses with semicolons (;).', :style => 'width: 400px;')
+
+    #tab_contact
+      %p.field
+        Use the three address lines to input local address details such as building and street names.
+        Start on the first line and leave the others blank if they are not needed.
+        Please use the Town/City and Postcode fields for those pieces of data.
+      = library_edit_field(@library, 'address1', 'Address', :prefix => @library.name, :additional_fields => %w{Address2 Address3})
+      = library_edit_field(@library, 'town_city', 'Town/City')
+      = library_edit_field(@library, 'post_code', 'Postcode')
+      %p.field
+        These phone, fax and email details are published in the library guide so that readers may make enquiries. If you have both staff-specific and general enquiry numbers and addresses then please give the general ones here.
+      = library_edit_field(@library, 'telephone', 'Phone number', :type => 'tel')
+      = library_edit_field(@library, 'fax', 'Fax number', :type => 'tel')
+      = library_edit_field(@library, 'email', 'Email address')
+      = library_edit_field(@library, 'website', 'Website', :type => 'url', :tip => 'If you do not have your own website then just leave this field blank. Note that LibGuides addresses should be put on the Social tab.')
+
+    #tab_hours
+      %p.field
+        Please give details of your opening hours. You may wish to include information such as
+        staffed hours and self-issue machines. This text will appear on the website unedited.
+        You may enter up to 500 characters in these fields. (This is roughly the length of a short paragraph.)
+      %p.field
+        Please see the
+        %a{:href => '#tab_style', :class => 'tablink'} style guidelines
+        for more tips.
+    
+      = library_edit_field(@library, 'term_hours', 'Term', :type => 'textarea')
+      = library_edit_field(@library, 'vacation_hours', 'Vacation', :type => 'textarea')
+      = library_edit_field(@library, 'closed_periods', 'Closed', :type => 'textarea')
+      = library_edit_field(@library, 'hours_notes', 'Notes', :type => 'textarea')
+
+    #tab_policies
+      %p.field
+        Although this is a complicated area, please try to give a summary of your admissions and borrowing
+        policies here. Select the amount of access allowed from the values All, Some, and None. All means
+        in general anyone in that category. Some means a subset of the category, for example a college's
+        own undergraduates, or a department's own postgraduates. None means in general nobody in that
+        category. Please generalise appropriately - although probably all Oxford's libraries could be
+        listed as Some access, that would not produce library guides which were helpful to readers! Use
+        the Notes fields to give further details, and in particular to define which readers qualify when
+        listing access as Some.
+      %p.field
+        You may enter up to 500 characters in these fields. (This is roughly the length of a short paragraph.)
+      %p.field
+        Please see the
+        %a{:href => '#tab_style', :class => 'tablink'} style guidelines
+        for more tips.
+      
+      %h3 Undergraduates        
+      = library_edit_field(@library, 'ug_access', 'Admissions', :type => 'select', :options => [['all', 1], ['some', 2], ['none', 3]], :class => 'all_some_none')
+      = library_edit_field(@library, 'ug_borrowing', 'Borrowing', :type => 'select', :options => [['all', 1], ['some', 2], ['none', 3]], :class => 'all_some_none')
+      = library_edit_field(@library, 'ug_notes', 'Notes', :type => 'textarea')
+      
+      %h3 Postgraduates        
+      = library_edit_field(@library, 'pg_access', 'Admissions', :type => 'select', :options => [['all', 1], ['some', 2], ['none', 3]], :class => 'all_some_none')
+      = library_edit_field(@library, 'pg_borrowing', 'Borrowing', :type => 'select', :options => [['all', 1], ['some', 2], ['none', 3]], :class => 'all_some_none')
+      = library_edit_field(@library, 'pg_notes', 'Notes', :type => 'textarea')
+      
+      %h3 Academic and research staff        
+      = library_edit_field(@library, 'academic_access', 'Admissions', :type => 'select', :options => [['all', 1], ['some', 2], ['none', 3]], :class => 'all_some_none')
+      = library_edit_field(@library, 'academic_borrowing', 'Borrowing', :type => 'select', :options => [['all', 1], ['some', 2], ['none', 3]], :class => 'all_some_none')
+      = library_edit_field(@library, 'academic_notes', 'Notes', :type => 'textarea')
+
+      %h3 Others
+      = library_edit_field(@library, 'other_access', 'Admissions', :type => 'select', :options => [['all', 1], ['some', 2], ['none', 3]], :class => 'all_some_none')
+      = library_edit_field(@library, 'other_borrowing', 'Borrowing', :type => 'select', :options => [['all', 1], ['some', 2], ['none', 3]], :class => 'all_some_none')
+      = library_edit_field(@library, 'other_notes', 'Notes', :type => 'textarea')
+
+    #tab_social
+      %p.field
+        For each social network or media you provide, select the type from the drop-down and enter the web address.
+
+      %table#social_links_list
+        %thead
+          %tr
+            %th Type
+            %th URL
+            %th
+        %tbody
+          - @library.social_links.all.each do |social_link|
+            %tr
+              %td
+                %select{:name => 'social_link[network][]'}
+                  %option{:value => ''}
+                  - SocialLink::NETWORKS.each do |network|
+                    %option{:value => network[:code], :selected => (network[:code] == social_link.network), :data => {:username_okay => (network[:url_prefix] ? 'true' : 'false'), :prefix => network[:username_prefix]}}= network[:name]
+              %td
+                %span.field_prefix
+                %input{:type => 'text', :name => 'social_link[url][]', :value => social_link.url}
+                %small.field_desc
+              %td.actions
+          %tr.template{:style => 'display: none;'}
+            %td
+              %select{:name => 'social_link[network][]'}
+                %option{:value => ''}
+                - SocialLink::NETWORKS.each do |network|
+                  %option{:value => network[:code], :data => {:username_okay => (network[:url_prefix] ? 'true' : 'false'), :prefix => network[:username_prefix]}}= network[:name]
+            %td
+              %span.field_prefix
+              %input{:type => 'text', :name => 'social_link[url][]'}
+              %small.field_desc
+            %td.actions
+
+    #tab_staff
+      %p.field
+        Please enter as many staff as you wish to appear in the library guides. For example you may wish to
+        only list a single librarian, or you may wish to include fellow librarians, assistants, a
+        departmental officer, and so on.
+
+      %table#staff_list
+        %thead
+          %tr
+            %th Title
+            %th Name
+            %th
+        %tbody
+          - @library.staffs.all.each do |staff|
+            %tr
+              %td
+                %input{:type => 'text', :name => 'staff[job_title][]', :value => staff.job_title}
+              %td
+                %input{:type => 'text', :name => 'staff[name_of_person][]', :value => staff.name_of_person}
+              %td.actions
+          %tr.template{:style => 'display: none;'}
+            %td
+              %input{:type => 'text', :name => 'staff[job_title][]'}
+            %td
+              %input{:type => 'text', :name => 'staff[name_of_person][]'}
+            %td.actions
+
+    #tab_subjects
+      %p.field
+        This is the list of subjects which are used to create the basic subject index. Please select those
+        under which you would like your library to be indexed, and make sure the rest are not selected.
+        If you have suggestions for changes to this list of subjects then contact an administrator.
+        
+      %ul#subjects_list
+        - Subject::all.each do |subject|
+          %li
+            %input{:type => 'hidden', :name => "subject[#{subject.id}]", :value => '0'}
+            - if @library.covers_subject?(subject)
+              %input{:type => 'checkbox', :name => "subject[#{subject.id}]", :id => "subject_#{subject.id}", :value => '1', :checked => 'checked'}
+            - else
+              %input{:type => 'checkbox', :name => "subject[#{subject.id}]", :id => "subject_#{subject.id}", :value => '1'}
+            %label{:for => "subject_#{subject.id}"}= h subject.subject
+    
+      %p.field{:style => 'padding-top: 1em'}
+        = library_edit_field(@library, 'subject_notes', 'Description', :type => 'textarea', :tip => 'This is a free-text field for you to describe the subjects covered by your library. You may enter up to 500 characters in this field. (This is roughly the length of a short paragraph.)')
+        
+    - if @me.is_admin?
+      #tab_courses
+        %p.field
+          Check
+          %em only
+          the courses for which undergraduate students in particular would be recommended to your library.
+
+        %ul#courses_list
+          - Course::all.each do |course|
+            %li
+              %input{:type => 'hidden', :name => "course[#{course.id}]", :value => '0'}
+              - if @library.covers_course?(course)
+                %input{:type => 'checkbox', :name => "course[#{course.id}]", :id => "course_#{course.id}", :value => '1', :checked => 'checked'}
+              - else
+                %input{:type => 'checkbox', :name => "course[#{course.id}]", :id => "course_#{course.id}", :value => '1'}
+              %label{:for => "course_#{course.id}"}= h course.name
+
+        %p.field
+
+    - if @me.is_admin?
+      #tab_location
+        = library_edit_field(@library, 'oxpoints_id', 'OxPoints ID')
+
+        - if !@library.oxpoints_id.blank?
+          %iframe{src: "//maps.ox.ac.uk/embed.html#/custom?ids=oxpoints:#{@library.oxpoints_id}&fullscreen", frameborder: 0, width: '100%', height: 300, scrolling: 'no'}
+
+        %p.field
+          Indicate the location of the library on the map by clicking to move the pin.
+
+        #map
+
+        %p.field{:style => 'padding-top: 1em'}
+          %label{:for => 'lat'} Lat:
+          %input#lat{:type => 'text', :name => 'library[lat]', :value => @library.lat}
+
+        %p.field{:style => 'padding-top: 1em'}
+          %label{:for => 'lng'} Lng:
+          %input#lng{:type => 'text', :name => 'library[lng]', :value => @library.lng}
+
+        :javascript
+          $(function(){
+            var marker;
+            var oxford = new google.maps.LatLng(51.77, -1.33);
+            var map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 13, center: oxford, mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+            google.maps.event.addListener(map, "click", function(event){
+              if (event.latLng) {
+                var latLng = event.latLng;
+                $('#lng').val(latLng.lng());
+                $('#lat').val(latLng.lat());
+                if(marker!=null){
+                  marker.setMap(null);
+                }
+                marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map
+                });
+              }
+            });
+            if($('#lat').val() != '' && $('#lng').val() != '') {
+              var library = new google.maps.LatLng($('#lat').val(), $('#lng').val());
+              marker = new google.maps.Marker({
+                position: library,
+                map: map
+              });
+            }
+            $("a[href='#tab_location']").click(function(){ google.maps.event.trigger(map, 'resize'); });
+          });
+
+    #tab_editors
+      %p.field The following users can edit data on behalf of this library:
+      %ul
+        - (@library.users.all + User::where('is_admin = 1').all).sort_by(&:username).each do |user|
+          %li
+            - if user.is_admin == 1
+              %span{:style => 'color: red;'}= h user.username
+            - else
+              %strong= h user.username
+      %p.field
+        %span{:style => 'color: red;'} Red
+        users are LibraryData superusers who have access to all library record.
+
+    #tab_style
+      %h3 Clock
+      %p 24-hour; do not use am/pm
+      %p No 0 before single digits
+      %p Use a full point and NOT a colon: 9.15-17.30 (ensure this is used throughout all sections of free text)
+      
+      %h3 Subjects
+      %p Capitalize: History, Economics
+      %p Do not close section with a full point 
+
+      %h3 Opening Hours
+      %p Use lists and avoid using several sentences
+      %p Do not close with a full point 
+
+      %h3 Closed Periods
+      %p Do not repeat the word closed
+      %p Do not abbreviate Bank Holiday to BH or months to e.g. Dec. 
+
+      %h3 Capitalize
+      %p Librarian and Library
+      %p Dept if referring to a specific University department, e.g. Physics Dept
+      %p University (if referring to Oxford University) but NOT when referring to all universities 
+
+      %h3 &, hrs
+      %p Expand to and, hours 
+
+      %h3 Weeks
+      %p 0 week or week 9, but NOT 0th week or 9th week 
+
+      %h3 Days
+      %p Strictly abbreviated to: Sun Mon Tue Wed Thur Fri Sat 
+
+      %h3 Dates
+      %p 4 September-16 October NOT 4th September-16th October 
+
+      %h3 Admission and Borrowing Policies
+      %p Form full sentences and close with a full point 
+
+      %h3 Numbers
+      %p Do not spell out
+
+  %p
+    %input{:type => 'submit', :value => 'Save Changes', :class => 'button'}
+    %input{:type => 'button', 'data-href' => "/libraries/#{@library.id}", :class => 'button', :value => 'View Library'}

@@ -1,0 +1,51 @@
+%h2.title= h @user.username
+
+#tabs
+  %ul
+    %li
+      %a{:href => '#tab_libraries'} Libraries
+    %li
+      %a{:href => '#tab_my_account'} My Account
+    - if @me.is_admin?
+      %li
+        %a.admin{:href => '#tab_courses'} Courses
+
+  #tab_libraries
+    %p You can manage the details of the following libraries. Click on a library to edit.
+    %ul
+      - @user.editable_libaries.all.each do |library|
+        %li
+          %a{:href => "/libraries/#{library.id}/edit"}= h library.Name
+
+  #tab_my_account
+    %form#change_password{:method => 'post', :action => "/users/#{h(@user.username)}/change_password"}
+      %h3 Change Password
+      %p.field
+        %label{:for => 'password1'} New Password:
+        %input#password1{:type => 'password', :name => 'password1'}
+        
+      %p.field
+        %label{:for => 'password2'} Again:
+        %input#password1{:type => 'password', :name => 'password2'}
+        
+      %p.buttons
+        %input{:type => 'submit', :value => 'Change Password', :class => 'button'}
+
+  #tab_courses
+    %p.alt_formats
+      Alternate formats:
+      %a{:href => '/courses.csv'} CSV
+    %h3 Current Courses
+    %p
+      The following undergraduate courses are recognised by the database:
+    %ul
+      - Course::all.each do |course|
+        %li
+          %a{:href => "/courses/#{course.id}"}= h course.name
+    %h3 Add A Course
+    %form{:action => '/courses', :method => 'post'}
+      %p New course name:
+      %p
+        %input{:type => :text, :name => 'course[name]', :id => 'course_name'}
+      %p
+        %input{:type => :submit, :value => 'Create', :class => 'button'}

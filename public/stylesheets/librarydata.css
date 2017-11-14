@@ -1,0 +1,103 @@
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 12px;
+}
+
+#login_status {
+  float: right;
+  margin: 0 0 1em 1em;
+  padding: 1em 2em;
+  border: 1px solid #A6C9E2;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.field {
+  clear: left;
+}
+
+.field label {
+  float: left;
+  text-align: right;
+  width: 250px;
+  font-weight: bold;
+}
+
+.field input, .field select, .field textarea,
+.field .input,
+.field small {
+  display: block;
+  margin-left: 260px;
+}
+
+.field input {
+  width: 400px;
+}
+
+.field textarea {
+  width: 400px;
+  height: 120px;
+}
+
+.field img.borrowing_policy {
+  float: left;
+  margin: 0 5px 0 10px;
+}
+
+#subjects_list li,
+#courses_list li {
+  list-style: none;
+  float: left;
+  width: 32%;
+}
+
+#tabs .admin {
+  color: red;
+}
+
+#map {
+  width: 100%;
+  height: 360px;
+}
+
+#opening_hours {
+  border-collapse: collapse;
+}
+
+#opening_hours th, #opening_hours td {
+  border: 1px solid #666;
+  text-align: center;
+}
+
+#opening_hours input {
+  width: 4em;
+  border: 0;
+  padding: 1px 2px;
+  margin: 0;
+  text-align: center;
+}
+
+#opening_hours input:focus {
+  background: #ff9;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+}
+
+table th, table td {
+  vertical-align: top;
+  padding: 2px 4px;
+}
+
+table td {
+  border-top: 1px solid #777;
+}

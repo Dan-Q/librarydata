@@ -1,0 +1,40 @@
+%h2.title Social Media
+
+%p Manage non-library social media links here.
+
+#tabs
+  %ul
+    %li
+      %a{:href => '#tab_social'} Social Links
+    %li
+      %a{:href => '#tab_addsocial'} Add Social Link
+
+  #tab_social
+    %form{:action => '/social', :method => 'post'}
+      %table
+        %thead
+          %tr
+            %th HTML
+            %th Delete
+        %tbody
+          - @non_library_links.each do |non_library_link|
+            %tr
+              %td
+                %textarea{:style => 'width: 60em; height: 6em;', :name => "non_library_link[#{non_library_link.id}][html]"}= h(non_library_link.html)
+              %td
+                %input{:type => 'checkbox', :name => "non_library_link[#{non_library_link.id}][delete]", :value => '1'}
+      %p
+        %input{:type => 'submit', :value => 'Save Changes'}
+
+  #tab_addsocial
+    %form{:action => '/social/add', :method => 'post'}
+      %table
+        %thead
+          %tr
+            %th HTML
+        %tbody
+          %tr
+            %td
+              %textarea{:style => 'width: 60em; height: 6em;', :name => "non_library_link[html]"}
+      %p
+        %input{:type => 'submit', :value => 'Save Changes'}

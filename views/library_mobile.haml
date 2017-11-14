@@ -1,0 +1,72 @@
+= "<!--cms start-->"
+
+#library
+  %h2= h @library.Name
+
+  - unless [@library.TermHours, @library.VacationHours].all?(&:blank?)
+    .section#opening
+      - unless @library.TermHours.blank?
+        .label Term:
+        .value= h(@library.TermHours)
+
+      - unless @library.VacationHours.blank?
+        .label Vacation:
+        .value= h(@library.VacationHours)
+
+  - unless [@library.Telephone, @library.Fax, @library.Email, @library.Website].all?(&:blank?)
+    .section#contact
+      - unless @library.Email.blank?
+        .label Email:
+        .value
+          %a{:href => no_quotes("mailto:#{@library.Email}")}= h(@library.Email)
+
+      - unless @library.Telephone.blank?
+        .label Telephone:
+        .value
+          %a{:href => no_quotes("tel:#{@library.Telephone}")}= h(@library.Telephone)
+
+      - unless @library.Website.blank?
+        .label Website:
+        .value
+          %a{:href => no_quotes(@library.Website)}= h(@library.Website.gsub(/^https?:\/\//, '').gsub(/\/$/, ''))
+
+  .section#address
+    .label Address:
+    .value= @library.address_lines.collect{|a|h(a)}.join(', ')
+
+  .section
+    %p
+      - # %small For directions to this library, click inside the map.
+    #library_map.mobile{:style => 'width: 100%; height: 200px;'}
+
+  - unless [@library.Facebook, @library.Twitter].all?(&:blank?)
+    .section#social_media
+      - unless @library.Facebook.blank?
+        .label Facebook:
+        .value
+          %a{:href => no_quotes(@library.Facebook)}= h @library.Facebook.gsub(/^https?:\/\//, '').gsub(/\/$/, '')
+
+      - unless @library.Twitter.blank?
+        .label Twitter:
+        .value
+          %a{:href => no_quotes("http://twitter.com/#{h(@library.Twitter)}")}= h "@#{@library.Twitter}"
+
+      - unless @library.Blog.blank?
+        .label Blog:
+        .value
+          %a{:href => no_quotes(@library.Blog)}= h @library.Blog.gsub(/^https?:\/\//, '').gsub(/\/$/, '')
+
+      - unless @library.LibraryThing.blank?
+        .label LibraryThing:
+        .value
+          %a{:href => no_quotes(@library.LibraryThing)}= h @library.LibraryThing.gsub(/^https?:\/\//, '').gsub(/\/$/, '')
+
+      - unless @library.Delicious.blank?
+        .label Delicious:
+        .value
+          %a{:href => no_quotes(@library.Delicious)}= h @library.Delicious.gsub(/^https?:\/\//, '').gsub(/\/$/, '')
+
+  %script{:src => '//maps.googleapis.com/maps/api/js?key=AIzaSyBtgxMIN-8j798f7NPvuaTQa_nVf5i9WWQ&sensor=true', :type => 'text/javascript'}
+  %script{:src => "/libraries/#{@library.id}.js", :type => 'text/javascript'}
+
+= "<!--cms end-->"

@@ -1,0 +1,74 @@
+%p.alt_formats
+  Alternate formats:
+  %a{:href => '/libraries.xml'} XML
+  |
+  %a{:href => '/libraries.json'} JSON
+  |
+  %a{:href => '/libraries.kml'} KML
+  |
+  %a{:href => '/libraries.csv'} CSV
+  |
+  %a{:href => '/libraries.gmaps'} GMaps
+  |
+  %a{:href => '/libraries.js'} GMaps JS
+
+= "<!--cms start-->"
+= haml :hide_main_header
+
+= "<!--new cms start-->"
+%h1#main_header Libraries
+
+:css
+  .list a {
+    color:black;
+    text-decoration: none;
+  }
+
+  .list a:link {
+    color: #3458a7;
+    text-decoration: underline;
+  }
+
+  .list a:visited {
+    color: #3458a7;
+    text-decoration: underline;
+  }
+
+  .list a:hover {
+    color: #3458a7;
+    text-decoration: underline;
+  }
+
+%p
+  This is a comprehensive list of all the Libraries associated with the University of Oxford.
+  Admission policies vary between libraries; details are available from the individual information
+  pages or web site links next to the name of each library. Oxford College libraries and other
+  University Libraries not part of the Bodleian Libraries are included in this list;
+  %strong however access to these libraries is restricted,
+  as outlined in the section entitled
+  %a{:href => 'http://www.bodleian.ox.ac.uk/subjects-and-libraries/libraries/college'} College Libraries
+  and 
+  %a{:href => 'http://www.bodleian.ox.ac.uk/subjects-and-libraries/libraries/other'} other University Libraries
+  (not part of the Bodleian Libraries). 
+
+#anchor_links
+  %center
+    - @letters.each do |letter|
+      %a{:href => "##{letter}"}= letter
+
+= haml File::read('views/_library_list.haml')
+
+:javascript
+  $(function(){
+    if(window.location.host == 'www.bodleian.ox.ac.uk'){
+      $('.library-list .library a.information').each(function(){
+        var library = $(this).closest("[data-class='Library'");
+        var newurl = '/subjects-and-libraries/libraries?id='+library.data('id');
+        if(library.data('site')){ newurl += '&site'; }
+        $(this).attr('href', newurl);
+      });
+    }
+  });
+
+= "<!--new cms end-->"
+= "<!--cms end-->"

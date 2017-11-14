@@ -1,0 +1,10 @@
+= "<!--new cms start-->"
+- @letters.each do |letter|
+  .group
+    %h2<= letter
+    %p
+      - @items.select{|i| i[0,1].upcase == letter || (letter == '#' && i =~ /^\d/)}.each do |i|
+        =i
+        %br/
+
+= "<!--new cms end-->"

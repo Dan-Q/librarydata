@@ -48,3 +48,8 @@ build-iPhoneSimulator/
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
+
+# Ignore import-specific data, configuration, etc.
+db/config.yml
+db/import
+db/librarydata.db

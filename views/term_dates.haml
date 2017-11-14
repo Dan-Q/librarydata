@@ -1,0 +1,18 @@
+%h2#title Term Dates
+
+%p.alt_formats
+  Alternate formats:
+  %a{:href => '/term-dates.xml'} XML
+  |
+  %a{:href => '/term-dates.json'} JSON
+
+%p
+  This page lists upcoming term dates.
+
+%dl
+  - @terms.each do |term|
+    %dt= h term.name
+    %dd
+      = h term.start_date
+      -
+      = h term.end_date

@@ -1,0 +1,50 @@
+%h2.title Manage
+
+#tabs
+  %ul
+    %li
+      %a{:href => '#tab_users'} Users
+    %li
+      %a{:href => '#tab_adduser'} Add User
+
+  #tab_users
+    %form{:action => '/manage/users', :method => 'post'}
+      %table
+        %thead
+          %tr
+            %th Username
+            %th Password
+            %th Libraries
+            %th Delete
+        %tbody
+          - @users.each do |user|
+            %tr
+              %td
+                %input{:type => 'text', :name => "user[#{user.id}][username]", :value => user.username}
+              %td
+                %input{:type => 'password', :name => "user[#{user.id}][password]"}
+              %td
+                %input{:type => 'text', :name => "user[#{user.id}][library_ids]", :value => (user.is_admin? ? 'super' : user.libraries.collect(&:id).join(','))}
+              %td
+                %input{:type => 'checkbox', :name => "user[#{user.id}][delete]", :value => '1'}
+      %p
+        %input{:type => 'submit', :value => 'Save Changes'}
+
+  #tab_adduser
+    %form{:action => '/manage/users/add', :method => 'post'}
+      %table
+        %thead
+          %tr
+            %th Username
+            %th Password
+            %th Libraries
+        %tbody
+          %tr
+            %td
+              %input{:type => 'text', :name => "user[username]"}
+            %td
+              %input{:type => 'password', :name => "user[password]"}
+            %td
+              %input{:type => 'text', :name => "user[library_ids]"}
+      %p
+        %input{:type => 'submit', :value => 'Save Changes'}
