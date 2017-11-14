@@ -3,6 +3,8 @@ require 'bundler/setup'
 require 'sinatra'
 require 'sinatra/activerecord'
 require 'sinatra/reloader'
+require 'builder'
+require 'active_support/core_ext/hash'
 
 enable :sessions, :logging
 set :session_secret, YAML.load(File.read('db/config.yml'))['session_secret']
