@@ -354,6 +354,7 @@ end
 get '/manage' do
   redirect to('/') unless @me && @me.is_admin?
   @users = User::order(:username).all
+  @termdates = TermDate.all
   haml :manage
 end
 
@@ -361,26 +362,21 @@ post '/manage/users' do
   redirect to('/') unless @me && @me.is_admin? && params['user']
   User::order(:username).all.each do |user|
     if(user_params = params['user'][user.id.to_s])
-      if(user_params['username'] != user.username)
-        user.username = user_params['username']
-        user.save
-      end
-      if(user_params['password'] != '')
-        user.temporary_password = user_params['password']
-        user.save
-      end
+      user.username = user_params['username']
+      user.temporary_password = user_params['temporary_password']
       current_libstring = (user.is_admin? ? 'super' : user.libraries.collect(&:id).join(','))
       if(user_params['library_ids'] != current_libstring)
         user.library_users.destroy_all
         if user_params['library_ids'] == 'super'
           user.is_admin = true
-          user.save
         else
+          user.is_admin = false
           user_params['library_ids'].split(',').each do |lid|
             user.library_users.create(:library_id => lid)
           end
         end
       end
+      user.save if user.changed?
       if(user_params['delete'].to_i == 1)
         user.destroy
       end
@@ -403,6 +399,20 @@ post '/manage/users/add' do
     end
   end
   redirect to('/manage')
+end
+
+post '/manage/termdates' do
+  redirect to('/') unless @me && @me.is_admin? && params['termdate']
+  TermDate::all.each do |termdate|
+    if(termdate_params = params['termdate'][termdate.id.to_s])
+      termdate.name = termdate_params['name']
+      termdate.start_date = termdate_params['start_date']
+      termdate.end_date = termdate_params['end_date']
+      termdate.save if termdate.changed?
+      termdate.destroy if(termdate_params['delete'].to_i == 1)
+    end
+  end
+  redirect to('/manage#tab_termdates')
 end
 
 get '/login' do

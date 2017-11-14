@@ -15,7 +15,7 @@
     %ul
       - @user.editable_libaries.all.each do |library|
         %li
-          %a{:href => "/libraries/#{library.id}/edit"}= h library.Name
+          %a{:href => "/libraries/#{library.id}/edit"}= h library.name
 
   #tab_my_account
     %form#change_password{:method => 'post', :action => "/users/#{h(@user.username)}/change_password"}

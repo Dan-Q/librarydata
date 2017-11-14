@@ -28,7 +28,7 @@
               %input{:type => 'checkbox', :name => "library[#{library.id}]", :id => "library_#{library.id}", :value => '1', :checked => 'checked'}
             - else
               %input{:type => 'checkbox', :name => "library[#{library.id}]", :id => "library_#{library.id}", :value => '1'}
-            %label{:for => "library_#{library.id}"}= h library.Name
+            %label{:for => "library_#{library.id}"}= h library.name
 
       %p.field
 

@@ -3,12 +3,14 @@
 #tabs
   %ul
     %li
-      %a{:href => '#tab_users'} Users
+      %a{href: '#tab_users'} Users
     %li
-      %a{:href => '#tab_adduser'} Add User
+      %a{href: '#tab_adduser'} Add User
+    %li
+      %a{href: '#tab_termdates'} Dates of Term
 
   #tab_users
-    %form{:action => '/manage/users', :method => 'post'}
+    %form{action: '/manage/users', method: 'post'}
       %table
         %thead
           %tr
@@ -20,31 +22,55 @@
           - @users.each do |user|
             %tr
               %td
-                %input{:type => 'text', :name => "user[#{user.id}][username]", :value => user.username}
+                %input{type: 'text', name: "user[#{user.id}][username]", value: user.username}
               %td
-                %input{:type => 'password', :name => "user[#{user.id}][password]"}
+                %input{type: 'password', name: "user[#{user.id}][temporary_password]", value: user.temporary_password}
               %td
-                %input{:type => 'text', :name => "user[#{user.id}][library_ids]", :value => (user.is_admin? ? 'super' : user.libraries.collect(&:id).join(','))}
+                %input{type: 'text', name: "user[#{user.id}][library_ids]", value: (user.is_admin? ? 'super' : user.libraries.collect(&:id).join(','))}
               %td
-                %input{:type => 'checkbox', :name => "user[#{user.id}][delete]", :value => '1'}
+                %input{type: 'checkbox', name: "user[#{user.id}][delete]", value: '1'}
       %p
-        %input{:type => 'submit', :value => 'Save Changes'}
+        %input{type: 'submit', value: 'Save Changes'}
 
   #tab_adduser
-    %form{:action => '/manage/users/add', :method => 'post'}
+    %form{action: '/manage/users/add', method: 'post'}
       %table
         %thead
           %tr
             %th Username
-            %th Password
+            %th Temporary Password
             %th Libraries
         %tbody
           %tr
             %td
-              %input{:type => 'text', :name => "user[username]"}
+              %input{type: 'text', name: "user[username]"}
             %td
-              %input{:type => 'password', :name => "user[password]"}
+              %input{type: 'password', name: "user[temporary_password]"}
             %td
-              %input{:type => 'text', :name => "user[library_ids]"}
+              %input{type: 'text', name: "user[library_ids]"}
       %p
-        %input{:type => 'submit', :value => 'Save Changes'}
+        %input{type: 'submit', value: 'Save Changes'}
+
+  #tab_termdates
+    %form{action: '/manage/termdates', method: 'post'}
+      %table
+        %thead
+          %tr
+            %th Name
+            %th Start
+            %th End
+            %th Delete
+        %tbody
+          - @termdates.each do |termdate|
+            %tr
+              %td
+                %input{type: 'text', name: "termdate[#{termdate.id}][name]", value: termdate.name}
+              %td
+                %input{type: 'date', name: "termdate[#{termdate.id}][start_date]", value: termdate.start_date}
+              %td
+                %input{type: 'date', name: "termdate[#{termdate.id}][end_date]", value: termdate.end_date}
+              %td
+                %input{type: 'checkbox', name: "termdate[#{termdate.id}][delete]", value: '1'}
+      %p
+        %input{type: 'submit', value: 'Save Changes'}
+

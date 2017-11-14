@@ -43,7 +43,8 @@ function social_links_list_changed(){
 $(function(){
   // tabs
   $('#tabs').tabs();
-  
+  $('#tabs a[href^="' + window.location.hash + '"]').click()
+
   // buttons
   $('.button').button();
   $('input:button[data-href]').click(function(){
