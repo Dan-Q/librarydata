@@ -26,7 +26,7 @@
 = "<!--new cms start-->"
 %h1#main_header.new_cms_only
   %a{:name => "L#{@library.id}"}
-  = h @library.Name
+  = h @library.name
 
 :javascript
   $(function(){
@@ -37,7 +37,7 @@
 
 %h2#main_header.old_cms_only
   %a{:name => "L#{@library.id}"}
-  = h @library.Name
+  = h @library.name
 
 - # %p= @library.alternative_names_html
 
@@ -63,41 +63,41 @@
       %a{:name => 'contact'} Contact
     .section
 
-      %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2, :summary => "layout table. The first column contains headings, the second column contains the information."}
+      %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2}
         %tr{:valign => 'top'}
           %th{:width => '18%'}
             %p Address:
           %td
             %p= @library.address_lines.collect{|a|h(a)}.join('<br />')
 
-        - unless @library.Telephone.blank?
+        - unless @library.telephone.blank?
           %tr{:valign => 'top'}
             %th{:width => '18%'}
               %p Phone:
             %td
-              %p= h @library.Telephone
+              %p= h @library.telephone
 
-        - unless @library.Fax.blank?
+        - unless @library.fax.blank?
           %tr{:valign => 'top'}
             %th{:width => '18%'}
               %p Fax:
             %td
-              %p= h @library.Fax
+              %p= h @library.fax
 
-        - unless @library.Email.blank?
+        - unless @library.email.blank?
           %tr{:valign => 'top'}
             %th{:width => '18%'}
               %p E-mail:
             %td
-              %p= h @library.Email
+              %p= h @library.email
 
-        - unless @library.Website.blank?
+        - unless @library.website.blank?
           %tr{:valign => 'top'}
             %th{:width => '18%'}
               %p Website:
             %td
               %p
-                %a{:href => no_quotes(@library.Website)}= h(@library.Website)
+                %a{:href => no_quotes(@library.website)}= h(@library.website)
 
   - if @show_social_networks
     #Xsocial.groupsection
@@ -105,46 +105,14 @@
         %a{:name => 'social'} Social Networks
       .section
 
-        %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2, :summary => "layout table. The first column contains headings, the second column contains the information."}
-          - unless @library.Facebook.blank?
+        %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2}
+          - @library.social_links.each do |social_link|
             %tr{:valign => 'top'}
               %th{:width => '18%'}
-                %p Facebook:
+                %p= h(social_link.network_name)
               %td
                 %p
-                  %a{:href => @library.Facebook}= h @library.Facebook
-
-          - unless @library.Twitter.blank?
-            %tr{:valign => 'top'}
-              %th{:width => '18%'}
-                %p Twitter:
-              %td
-                %p
-                  %a{:href => "http://twitter.com/#{h(@library.Twitter)}"}= h "@#{@library.Twitter}"
-
-          - unless @library.Blog.blank?
-            %tr{:valign => 'top'}
-              %th{:width => '18%'}
-                %p Blog:
-              %td
-                %p
-                  %a{:href => @library.Blog}= h(@library.Blog)
-
-          - unless @library.LibraryThing.blank?
-            %tr{:valign => 'top'}
-              %th{:width => '18%'}
-                %p LibraryThing:
-              %td
-                %p
-                  %a{:href => @library.LibraryThing}= h(@library.LibraryThing)
-
-          - unless @library.Delicious.blank?
-            %tr{:valign => 'top'}
-              %th{:width => '18%'}
-                %p Delicious:
-              %td
-                %p
-                  %a{:href => "http://del.icio.us/#{h(@library.Delicious)}"}= h @library.Delicious
+                  %a{href: social_link.auto_url}= social_link.auto_url
 
   #Xstaff.groupsection
     %h3
@@ -152,12 +120,12 @@
     .section
     
       - @library.staffs.all.each do |staff|
-        %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2, :summary => "layout table. The first column contains headings, the second column contains the information."}
+        %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2}
           %tr{:valign => 'top'}
             %th{:width => '18%'}
-              %p= h "#{staff.JobTitle}:"
+              %p= h "#{staff.job_title}:"
             %td
-              %p= h staff.NameOfPerson
+              %p= h staff.name_of_person
 
   #Xhours.groupsection
     %h3
@@ -168,34 +136,34 @@
         Note that opening hours may sometimes change at short notice.
         If travelling to visit a library you are advised to check with the library to confirm details.
 
-      %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2, :summary => "layout table. The first column contains headings, the second column contains the information."}
+      %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2}
         %tr{:valign => 'top'}
           %th{:width => '18%'}
             %p Term time:
           %td
-            %p= @library.TermHours.blank? ? '<em>[Library has not supplied this information]</em>' : h(@library.TermHours)
+            %p= @library.term_hours.blank? ? '<em>[Library has not supplied this information]</em>' : h(@library.term_hours)
 
-      %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2, :summary => "layout table. The first column contains headings, the second column contains the information."}
+      %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2}
         %tr{:valign => 'top'}
           %th{:width => '18%'}
             %p Vacation:
           %td
-            %p= @library.VacationHours.blank? ? '<em>[Library has not supplied this information]</em>' : h(@library.VacationHours)
+            %p= @library.vacation_hours.blank? ? '<em>[Library has not supplied this information]</em>' : h(@library.vacation_hours)
 
-      %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2, :summary => "layout table. The first column contains headings, the second column contains the information."}
+      %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2}
         %tr{:valign => 'top'}
           %th{:width => '18%'}
             %p Closed:
           %td
-            %p= @library.ClosedPeriods.blank? ? '<em>[Library has not supplied this information]</em>' : h(@library.ClosedPeriods)
+            %p= @library.closed_periods.blank? ? '<em>[Library has not supplied this information]</em>' : h(@library.closed_periods)
 
-      - unless @library.HoursNotes.blank?
-        %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2, :summary => "layout table. The first column contains headings, the second column contains the information."}
+      - unless @library.hours_notes.blank?
+        %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2}
           %tr{:valign => 'top'}
             %th{:width => '18%'}
               %p Notes:
             %td
-              %p= h @library.HoursNotes
+              %p= h @library.hours_notes
 
   #Xadmissions.groupsection
     %h3
@@ -206,45 +174,41 @@
         Note that by necessity these policies are much simplified and provided for initial guidance only.
         Please check with the library for full details.
 
-      %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2, :summary => "layout table. The first column contains headings, the second column contains the information."}
+      %table.border{:width => '100%', :cellspacing => 2, :cellpadding => 2}
         %tr{:valign => 'top'}
           %th{:width => '18%'}
             %p OU undergraduate students:
           %td
             %p
-              = @library.borrowing_policies_html('UG')
+              = @library.borrowing_policies_html('ug')
 
         %tr{:valign => 'top'}
           %th{:width => '18%'}
             %p OU postgraduate students:
           %td
             %p
-              = @library.borrowing_policies_html('PG')
+              = @library.borrowing_policies_html('pg')
 
         %tr{:valign => 'top'}
           %th{:width => '18%'}
             %p OU academic and research staff:
           %td
             %p
-              = @library.borrowing_policies_html('Academic')
+              = @library.borrowing_policies_html('academic')
 
         %tr{:valign => 'top'}
           %th{:width => '18%'}
             %p Others:
           %td
             %p
-              = @library.borrowing_policies_html('Other')
+              = @library.borrowing_policies_html('other')
 
   #Xsubjects.groupsection
     %h3
       %a{:name => 'subjects'} Subjects Covered
     .section
     
-      %p= h @library.SubjectNotes
+      %p= h @library.subject_notes
       
-      - # %p
-      - #   This library is indexed under:
-      - #   = h @library.subjects.all.uniq.collect{|s| s.Subject}.join('; ')
-
 = "<!--new cms end-->"
 = "<!--cms end-->"

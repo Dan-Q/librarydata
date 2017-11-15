@@ -10,50 +10,39 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171114185355) do
+ActiveRecord::Schema.define(version: 20171115083744) do
 
-  create_table "alternative_names", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "alternative_names", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.integer "library_id"
     t.integer "type_of_alternative_name"
     t.boolean "show_in_group"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "colleges", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "colleges", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.integer "library_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "courses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "courses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "libraries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "libraries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
-    t.boolean "name_overrides_olis"
-    t.integer "name_order"
-    t.boolean "name_is_site_name"
-    t.integer "calculate_library_institution_name"
-    t.integer "map_key_includes_this_name"
-    t.string "map_p_vtype"
-    t.integer "map_p_vnumber"
-    t.string "map_p_vsquare"
-    t.integer "map_normal_blob_number"
-    t.decimal "map_normal_blob_x", precision: 5, scale: 2
-    t.decimal "map_normal_blob_y", precision: 5, scale: 2
-    t.string "map_normal_off_map_dir"
-    t.string "address1"
-    t.string "address2"
-    t.string "address3"
+    t.text "address"
     t.string "town_city"
     t.string "post_code"
     t.string "telephone"
     t.string "fax"
     t.string "email"
     t.string "website"
-    t.string "map_reference"
-    t.integer "library_type"
-    t.text "library_type_notes"
     t.text "subject_notes"
     t.integer "ug_access"
     t.integer "ug_borrowing"
@@ -74,82 +63,98 @@ ActiveRecord::Schema.define(version: 20171114185355) do
     t.text "extra_notes"
     t.string "admin_name"
     t.string "admin_email"
-    t.integer "last_update"
-    t.string "last_modified_user"
-    t.text "facebook"
-    t.text "twitter"
-    t.text "blog"
-    t.text "library_thing"
-    t.text "delicious"
-    t.integer "scheduled_for_deletion"
+    t.boolean "scheduled_for_deletion", default: false, null: false
     t.integer "site_id"
     t.decimal "lat", precision: 20, scale: 16
     t.decimal "lng", precision: 20, scale: 16
-    t.boolean "not_on_web_site"
     t.string "library_group"
     t.integer "oxpoints_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "library_courses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "library_courses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "library_id"
     t.integer "course_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "library_subjects", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "library_subjects", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "subject_id"
     t.integer "library_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "library_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "library_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "library_id"
     t.integer "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "non_library_links", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "non_library_links", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.text "html"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "opening_hours", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "opening_hours", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "library_id"
     t.string "period"
     t.integer "wday"
     t.string "open"
     t.string "close"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "sites", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "sites", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "social_links", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "social_links", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "library_id"
     t.string "network"
     t.string "url"
     t.integer "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "staffs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "staffs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "library_id"
     t.string "job_title"
     t.string "name_of_person"
     t.integer "list_order"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "subjects", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "subjects", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "subject"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "term_dates", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "term_dates", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.date "start_date"
     t.date "end_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "username"
     t.string "temporary_password"
     t.string "hashed_password"
     t.boolean "is_admin"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end

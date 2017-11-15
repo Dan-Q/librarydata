@@ -1,34 +1,34 @@
 %h2.title
-  %a{:name => "L#{@library.id}"}= h "Edit #{@library.name}"
+  %a{name: "L#{@library.id}"}= h "Edit #{@library.name}"
 
-%form{:method => 'post', :action => "/libraries/#{@library.id}/edit"}
+%form{method: 'post', action: "/libraries/#{@library.id}/edit"}
   #tabs
     %ul
       %li
-        %a{:href => '#tab_name'} Name
+        %a{type: '#tab_name'} Name
       %li
-        %a{:href => '#tab_administration'} Administration
+        %a{type: '#tab_administration'} Administration
       %li
-        %a{:href => '#tab_contact'} Contact
+        %a{type: '#tab_contact'} Contact
       %li
-        %a{:href => '#tab_hours'} Hours
+        %a{type: '#tab_hours'} Hours
       %li
-        %a{:href => '#tab_policies'} Policies
+        %a{type: '#tab_policies'} Policies
       %li
-        %a{:href => '#tab_social'} Social
+        %a{type: '#tab_social'} Social
       %li
-        %a{:href => '#tab_staff'} Staff
+        %a{type: '#tab_staff'} Staff
       %li
-        %a{:href => '#tab_subjects'} Subjects
+        %a{type: '#tab_subjects'} Subjects
       - if @me.is_admin?
         %li
-          %a{:href => '#tab_courses', :class => 'admin'} Courses
+          %a{type: '#tab_courses', class: 'admin'} Courses
         %li
-          %a{:href => '#tab_location', :class => 'admin'} Location
+          %a{type: '#tab_location', class: 'admin'} Location
       %li
-        %a{:href => '#tab_editors'} Editors
+        %a{type: '#tab_editors'} Editors
       %li
-        %a{:href => '#tab_style'} Style Guidelines
+        %a{type: '#tab_style'} Style Guidelines
     
     #tab_name
       %p.field
@@ -55,23 +55,23 @@
         If you need to edit any of this information, please contact a service administrator.
   
     #tab_administration
-      = library_edit_field(@library, 'admin_name', 'Contact Name', :style => 'width: 400px;')
-      = library_edit_field(@library, 'admin_email', 'Contact Email', :tip => 'Separate multiple email addresses with semicolons (;).', :style => 'width: 400px;')
+      = library_edit_field(@library, 'admin_name', 'Contact Name', style: 'width: 400px;')
+      = library_edit_field(@library, 'admin_email', 'Contact Email', tip: 'Separate multiple email addresses with semicolons (;).', style: 'width: 400px;')
 
     #tab_contact
       %p.field
         Use the three address lines to input local address details such as building and street names.
         Start on the first line and leave the others blank if they are not needed.
         Please use the Town/City and Postcode fields for those pieces of data.
-      = library_edit_field(@library, 'address1', 'Address', :prefix => @library.name, :additional_fields => %w{Address2 Address3})
+      = library_edit_field(@library, 'address', 'Address', prefix: @library.name, type: 'textarea')
       = library_edit_field(@library, 'town_city', 'Town/City')
       = library_edit_field(@library, 'post_code', 'Postcode')
       %p.field
         These phone, fax and email details are published in the library guide so that readers may make enquiries. If you have both staff-specific and general enquiry numbers and addresses then please give the general ones here.
-      = library_edit_field(@library, 'telephone', 'Phone number', :type => 'tel')
-      = library_edit_field(@library, 'fax', 'Fax number', :type => 'tel')
+      = library_edit_field(@library, 'telephone', 'Phone number', type: 'tel')
+      = library_edit_field(@library, 'fax', 'Fax number', type: 'tel')
       = library_edit_field(@library, 'email', 'Email address')
-      = library_edit_field(@library, 'website', 'Website', :type => 'url', :tip => 'If you do not have your own website then just leave this field blank. Note that LibGuides addresses should be put on the Social tab.')
+      = library_edit_field(@library, 'website', 'Website', type: 'url', tip: 'If you do not have your own website then just leave this field blank. Note that LibGuides addresses should be put on the Social tab.')
 
     #tab_hours
       %p.field
@@ -80,13 +80,13 @@
         You may enter up to 500 characters in these fields. (This is roughly the length of a short paragraph.)
       %p.field
         Please see the
-        %a{:href => '#tab_style', :class => 'tablink'} style guidelines
+        %a{type: '#tab_style', class: 'tablink'} style guidelines
         for more tips.
     
-      = library_edit_field(@library, 'term_hours', 'Term', :type => 'textarea')
-      = library_edit_field(@library, 'vacation_hours', 'Vacation', :type => 'textarea')
-      = library_edit_field(@library, 'closed_periods', 'Closed', :type => 'textarea')
-      = library_edit_field(@library, 'hours_notes', 'Notes', :type => 'textarea')
+      = library_edit_field(@library, 'term_hours', 'Term', type: 'textarea')
+      = library_edit_field(@library, 'vacation_hours', 'Vacation', type: 'textarea')
+      = library_edit_field(@library, 'closed_periods', 'Closed', type: 'textarea')
+      = library_edit_field(@library, 'hours_notes', 'Notes', type: 'textarea')
 
     #tab_policies
       %p.field
@@ -102,28 +102,28 @@
         You may enter up to 500 characters in these fields. (This is roughly the length of a short paragraph.)
       %p.field
         Please see the
-        %a{:href => '#tab_style', :class => 'tablink'} style guidelines
+        %a{type: '#tab_style', class: 'tablink'} style guidelines
         for more tips.
       
       %h3 Undergraduates        
-      = library_edit_field(@library, 'ug_access', 'Admissions', :type => 'select', :options => [['all', 1], ['some', 2], ['none', 3]], :class => 'all_some_none')
-      = library_edit_field(@library, 'ug_borrowing', 'Borrowing', :type => 'select', :options => [['all', 1], ['some', 2], ['none', 3]], :class => 'all_some_none')
-      = library_edit_field(@library, 'ug_notes', 'Notes', :type => 'textarea')
+      = library_edit_field(@library, 'ug_access', 'Admissions', type: 'select', options: [['all', 1], ['some', 2], ['none', 3]], class: 'all_some_none')
+      = library_edit_field(@library, 'ug_borrowing', 'Borrowing', type: 'select', options: [['all', 1], ['some', 2], ['none', 3]], class: 'all_some_none')
+      = library_edit_field(@library, 'ug_notes', 'Notes', type: 'textarea')
       
       %h3 Postgraduates        
-      = library_edit_field(@library, 'pg_access', 'Admissions', :type => 'select', :options => [['all', 1], ['some', 2], ['none', 3]], :class => 'all_some_none')
-      = library_edit_field(@library, 'pg_borrowing', 'Borrowing', :type => 'select', :options => [['all', 1], ['some', 2], ['none', 3]], :class => 'all_some_none')
-      = library_edit_field(@library, 'pg_notes', 'Notes', :type => 'textarea')
+      = library_edit_field(@library, 'pg_access', 'Admissions', type: 'select', options: [['all', 1], ['some', 2], ['none', 3]], class: 'all_some_none')
+      = library_edit_field(@library, 'pg_borrowing', 'Borrowing', type: 'select', options: [['all', 1], ['some', 2], ['none', 3]], class: 'all_some_none')
+      = library_edit_field(@library, 'pg_notes', 'Notes', type: 'textarea')
       
       %h3 Academic and research staff        
-      = library_edit_field(@library, 'academic_access', 'Admissions', :type => 'select', :options => [['all', 1], ['some', 2], ['none', 3]], :class => 'all_some_none')
-      = library_edit_field(@library, 'academic_borrowing', 'Borrowing', :type => 'select', :options => [['all', 1], ['some', 2], ['none', 3]], :class => 'all_some_none')
-      = library_edit_field(@library, 'academic_notes', 'Notes', :type => 'textarea')
+      = library_edit_field(@library, 'academic_access', 'Admissions', type: 'select', options: [['all', 1], ['some', 2], ['none', 3]], class: 'all_some_none')
+      = library_edit_field(@library, 'academic_borrowing', 'Borrowing', type: 'select', options: [['all', 1], ['some', 2], ['none', 3]], class: 'all_some_none')
+      = library_edit_field(@library, 'academic_notes', 'Notes', type: 'textarea')
 
       %h3 Others
-      = library_edit_field(@library, 'other_access', 'Admissions', :type => 'select', :options => [['all', 1], ['some', 2], ['none', 3]], :class => 'all_some_none')
-      = library_edit_field(@library, 'other_borrowing', 'Borrowing', :type => 'select', :options => [['all', 1], ['some', 2], ['none', 3]], :class => 'all_some_none')
-      = library_edit_field(@library, 'other_notes', 'Notes', :type => 'textarea')
+      = library_edit_field(@library, 'other_access', 'Admissions', type: 'select', options: [['all', 1], ['some', 2], ['none', 3]], class: 'all_some_none')
+      = library_edit_field(@library, 'other_borrowing', 'Borrowing', type: 'select', options: [['all', 1], ['some', 2], ['none', 3]], class: 'all_some_none')
+      = library_edit_field(@library, 'other_notes', 'Notes', type: 'textarea')
 
     #tab_social
       %p.field
@@ -139,24 +139,24 @@
           - @library.social_links.all.each do |social_link|
             %tr
               %td
-                %select{:name => 'social_link[network][]'}
-                  %option{:value => ''}
+                %select{name: 'social_link[network][]'}
+                  %option{value: ''}
                   - SocialLink::NETWORKS.each do |network|
-                    %option{:value => network[:code], :selected => (network[:code] == social_link.network), :data => {:username_okay => (network[:url_prefix] ? 'true' : 'false'), :prefix => network[:username_prefix]}}= network[:name]
+                    %option{value: network[:code], :selected => (network[:code] == social_link.network), data: {username_okay: (network[:url_prefix] ? 'true' : 'false'), prefix: network[:username_prefix]}}= network[:name]
               %td
                 %span.field_prefix
-                %input{:type => 'text', :name => 'social_link[url][]', :value => social_link.url}
+                %input{type: 'text', name: 'social_link[url][]', value: social_link.url}
                 %small.field_desc
               %td.actions
-          %tr.template{:style => 'display: none;'}
+          %tr.template{style: 'display: none;'}
             %td
-              %select{:name => 'social_link[network][]'}
-                %option{:value => ''}
+              %select{name: 'social_link[network][]'}
+                %option{value: ''}
                 - SocialLink::NETWORKS.each do |network|
-                  %option{:value => network[:code], :data => {:username_okay => (network[:url_prefix] ? 'true' : 'false'), :prefix => network[:username_prefix]}}= network[:name]
+                  %option{value: network[:code], data: {username_okay: (network[:url_prefix] ? 'true' : 'false'), prefix: network[:username_prefix]}}= network[:name]
             %td
               %span.field_prefix
-              %input{:type => 'text', :name => 'social_link[url][]'}
+              %input{type: 'text', name: 'social_link[url][]'}
               %small.field_desc
             %td.actions
 
@@ -176,15 +176,15 @@
           - @library.staffs.all.each do |staff|
             %tr
               %td
-                %input{:type => 'text', :name => 'staff[job_title][]', :value => staff.job_title}
+                %input{type: 'text', name: 'staff[job_title][]', value: staff.job_title}
               %td
-                %input{:type => 'text', :name => 'staff[name_of_person][]', :value => staff.name_of_person}
+                %input{type: 'text', name: 'staff[name_of_person][]', value: staff.name_of_person}
               %td.actions
-          %tr.template{:style => 'display: none;'}
+          %tr.template{style: 'display: none;'}
             %td
-              %input{:type => 'text', :name => 'staff[job_title][]'}
+              %input{type: 'text', name: 'staff[job_title][]'}
             %td
-              %input{:type => 'text', :name => 'staff[name_of_person][]'}
+              %input{type: 'text', name: 'staff[name_of_person][]'}
             %td.actions
 
     #tab_subjects
@@ -196,15 +196,15 @@
       %ul#subjects_list
         - Subject::all.each do |subject|
           %li
-            %input{:type => 'hidden', :name => "subject[#{subject.id}]", :value => '0'}
+            %input{type: 'hidden', name: "subject[#{subject.id}]", value: '0'}
             - if @library.covers_subject?(subject)
-              %input{:type => 'checkbox', :name => "subject[#{subject.id}]", :id => "subject_#{subject.id}", :value => '1', :checked => 'checked'}
+              %input{type: 'checkbox', name: "subject[#{subject.id}]", id: "subject_#{subject.id}", value: '1', checked: 'checked'}
             - else
-              %input{:type => 'checkbox', :name => "subject[#{subject.id}]", :id => "subject_#{subject.id}", :value => '1'}
+              %input{type: 'checkbox', name: "subject[#{subject.id}]", id: "subject_#{subject.id}", value: '1'}
             %label{:for => "subject_#{subject.id}"}= h subject.subject
     
-      %p.field{:style => 'padding-top: 1em'}
-        = library_edit_field(@library, 'subject_notes', 'Description', :type => 'textarea', :tip => 'This is a free-text field for you to describe the subjects covered by your library. You may enter up to 500 characters in this field. (This is roughly the length of a short paragraph.)')
+      %p.field{style: 'padding-top: 1em'}
+        = library_edit_field(@library, 'subject_notes', 'Description', type: 'textarea', tip: 'This is a free-text field for you to describe the subjects covered by your library. You may enter up to 500 characters in this field. (This is roughly the length of a short paragraph.)')
         
     - if @me.is_admin?
       #tab_courses
@@ -216,11 +216,11 @@
         %ul#courses_list
           - Course::all.each do |course|
             %li
-              %input{:type => 'hidden', :name => "course[#{course.id}]", :value => '0'}
+              %input{type: 'hidden', name: "course[#{course.id}]", value: '0'}
               - if @library.covers_course?(course)
-                %input{:type => 'checkbox', :name => "course[#{course.id}]", :id => "course_#{course.id}", :value => '1', :checked => 'checked'}
+                %input{type: 'checkbox', name: "course[#{course.id}]", id: "course_#{course.id}", value: '1', checked: 'checked'}
               - else
-                %input{:type => 'checkbox', :name => "course[#{course.id}]", :id => "course_#{course.id}", :value => '1'}
+                %input{type: 'checkbox', name: "course[#{course.id}]", id: "course_#{course.id}", value: '1'}
               %label{:for => "course_#{course.id}"}= h course.name
 
         %p.field
@@ -237,13 +237,13 @@
 
         #map
 
-        %p.field{:style => 'padding-top: 1em'}
+        %p.field{style: 'padding-top: 1em'}
           %label{:for => 'lat'} Lat:
-          %input#lat{:type => 'text', :name => 'library[lat]', :value => @library.lat}
+          %input#lat{type: 'text', name: 'library[lat]', value: @library.lat}
 
-        %p.field{:style => 'padding-top: 1em'}
+        %p.field{style: 'padding-top: 1em'}
           %label{:for => 'lng'} Lng:
-          %input#lng{:type => 'text', :name => 'library[lng]', :value => @library.lng}
+          %input#lng{type: 'text', name: 'library[lng]', value: @library.lng}
 
         :javascript
           $(function(){
@@ -282,11 +282,11 @@
         - (@library.users.all + User::where('is_admin = 1').all).sort_by(&:username).each do |user|
           %li
             - if user.is_admin?
-              %span{:style => 'color: red;'}= h user.username
+              %span{style: 'color: red;'}= h user.username
             - else
               %strong= h user.username
       %p.field
-        %span{:style => 'color: red;'} Red
+        %span{style: 'color: red;'} Red
         users are LibraryData superusers who have access to all library record.
 
     #tab_style
@@ -331,5 +331,5 @@
       %p Do not spell out
 
   %p
-    %input{:type => 'submit', :value => 'Save Changes', :class => 'button'}
-    %input{:type => 'button', 'data-href' => "/libraries/#{@library.id}", :class => 'button', :value => 'View Library'}
+    %input{type: 'submit', value: 'Save Changes', class: 'button'}
+    %input{type: 'button', 'data-href' => "/libraries/#{@library.id}", class: 'button', value: 'View Library'}

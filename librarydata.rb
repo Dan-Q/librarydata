@@ -2,7 +2,6 @@
 require 'bundler/setup'
 require 'sinatra'
 require 'sinatra/activerecord'
-require 'sinatra/reloader'
 require 'builder'
 require 'active_support/core_ext/hash'
 
@@ -113,11 +112,11 @@ get %r[/libraries/(\d+)(\.(xml|json|html|kml|gmaps|js|mobile))?] do
     return js(@site.libraries, @library.lat, @library.lng, 16) if format == 'js'
     haml :site
   else
-    return xml(@library, "#{@library.Name}.xml") if format == 'xml'
-    return json(@library, "#{@library.Name}.json") if format == 'json'
-    return kml(@library, "#{@library.Name}.kml") if format == 'kml'
+    return xml(@library, "#{@library.name}.xml") if format == 'xml'
+    return json(@library, "#{@library.name}.json") if format == 'json'
+    return kml(@library, "#{@library.name}.kml") if format == 'kml'
     return js([@library], @library.lat, @library.lng, 17) if format == 'js'
-    @show_social_networks = [@library.Facebook, @library.Twitter, @library.Blog, @library.Delicious].any?{|p| !p.blank?}
+    @show_social_networks = @library.social_links.any?
     return haml(:library_mobile) if format == 'mobile'
     haml :library
   end
@@ -135,7 +134,7 @@ post '/libraries/:id/edit' do
   id = params[:id]
   halt(404, "Library ##{id} not found.") unless @library = Library::find_by_id(id)
   halt(403, "Not logged in.") unless @me
-  halt(403, "Not allowed to edit #{@library.Name}.") unless @me.can_edit?(@library)
+  halt(403, "Not allowed to edit #{@library.name}.") unless @me.can_edit?(@library)
   # bulk update normal params
   @library.update_attributes(params[:library])
   # subjects:

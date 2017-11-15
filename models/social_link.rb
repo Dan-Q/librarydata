@@ -26,7 +26,7 @@ class SocialLink < ActiveRecord::Base
     { name: 'Slideshare',               code: 'slideshare' },
     { name: 'SoundCloud',               code: 'soundcloud' },
     { name: 'Tumblr',                   code: 'tumblr',      url_prefix: 'http//', url_suffix: '.tumblr.com/' },
-    { name: 'Twitter',                  code: 'twitter',     url_prefix: 'https//twitter.com/',        username_prefix: '@' },
+    { name: 'Twitter',                  code: 'twitter',     url_prefix: 'https://twitter.com/',        username_prefix: '@' },
     { name: 'Vimeo',                    code: 'vimeo' },
     { name: 'Wikipedia',                code: 'wikipedia' },
     { name: 'WorldCat',                 code: 'worldcat' },
@@ -54,5 +54,11 @@ class SocialLink < ActiveRecord::Base
     attributes[:href] = self.auto_url
     atts = attributes.collect{|k,v| " #{k}=\"#{v.strip}\""}.join
     "<a#{atts}>#{content.strip}</a>"
+  end
+
+  # Returns the network name, friendly form
+  def network_name
+    return "<!-- network_info not found in network_name(#{self.network}) -->" unless network_info = NETWORKS.select{|n| n[:code] == self.network}.first
+    network_info[:name]
   end
 end

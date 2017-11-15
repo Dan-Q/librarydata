@@ -14,7 +14,7 @@
               - if inner_library = library.libraries.where("Website IS NOT NULL AND Website <> ''").first
                 |
                 %a.website{:href => no_quotes(inner_library.website)} Website
-            - elsif library.is_a?(Library) # && (library.calculate_library_institution_name <= 2)
+            - elsif library.is_a?(Library)
               - if site = library.site && !@cross_references_as_links
                 = h library.name
                 = "(see <a href=\"#S#{library.site_id}\">#{library.site.name}</a>)"
@@ -30,7 +30,7 @@
                 |
                 %a.edit{:href => library.url + '/edit'} Edit
 
-            - elsif library.is_a?(AlternativeName) && (actual_library = @libraries.select{|l| l.is_a?(Library) && l.id == library.library_id}.first) && (actual_library.calculate_library_institution_name <= 2)
+            - elsif library.is_a?(AlternativeName) && (actual_library = @libraries.select{|l| l.is_a?(Library) && l.id == library.library_id}.first)
               - if @cross_references_as_links
                 %a{:name => "L#{actual_library.id}"}
                 = h library.name

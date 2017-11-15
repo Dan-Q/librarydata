@@ -15,7 +15,7 @@ $(function(){
         title: "<%= l.name %>"
       });
       var infowindow<%= l.id %> = new google.maps.InfoWindow({
-        content:"<p><strong><%= l.name %></strong><br /><%= l.address_lines[1..-1].join('<br />') %></p>"
+        content:"<p><strong><%= l.name %></strong><br /><%= l.address_lines[1..-1].join("\n").gsub(/ *[\r\n]+ */, '<br />') %></p>"
       });
       info_windows.push(infowindow<%= l.id %>);
       google.maps.event.addListener(marker<%= l.id %>, 'click', function() {

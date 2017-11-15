@@ -12,7 +12,7 @@ class Library < ActiveRecord::Base
   has_many :social_links, :dependent => :destroy
   has_one :college # if it's a college library
   
-  default_scope { order('name').where('not_on_web_site = 0').where('scheduled_for_deletion = 0').includes(:opening_hours) }
+  default_scope { order('name').where(scheduled_for_deletion: false).includes(:opening_hours) }
   scope :with_opening_hours, -> { where("(vacation_hours IS NOT NULL AND vacation_hours <> '') OR (closed_periods IS NOT NULL AND closed_periods <> '') OR (hours_notes IS NOT NULL AND hours_notes <> '')") }
 
   attr_accessor :opening_hours_collection
@@ -44,9 +44,7 @@ class Library < ActiveRecord::Base
         end
       end
       xml.address do
-        xml.address1    self.address1
-        xml.address2    self.address2
-        xml.address3    self.address3
+        xml.address1    self.address
         xml.town        self.town_city
         xml.postcode    self.post_code
       end
@@ -97,40 +95,23 @@ class Library < ActiveRecord::Base
     end
   end
 
-  # Old compatability methods for the social networks
-  def Facebook
-    self.social_links.where('network = ?', 'facebook').first.try(&:url)
-  end
-  def Twitter
-    self.social_links.where('network = ?', 'twitter').first.try(&:url)
-  end
-  def Blog
-    self.social_links.where('network = ?', 'blog').first.try(&:url)
-  end
-  def LibraryThing
-    self.social_links.where('network = ?', 'librarything').first.try(&:url)
-  end
-  def Delicious
-    self.social_links.where('network = ?', 'delicious').first.try(&:url)
-  end
-
   def url(format = nil)
     "/libraries/#{self.id}#{format ? ".#{format}" : ''}"
   end
   
   def address_lines
-    [self.name, self.address1, self.address2, self.address3, self.town_city, self.post_code].reject(&:blank?)
+    [self.name, self.address, self.town_city, self.post_code].reject(&:blank?)
   end
   
   def borrowing_policy_html(category, level)
-    return '<img src="/images/borrowing_policies/1.gif" alt="All" width="18" height="18"> all' if attributes["#{category}#{level}"] == 1
-    return '<img src="/images/borrowing_policies/2.gif" alt="Some" width="18" height="18"> some' if attributes["#{category}#{level}"] == 2
-    return '<img src="/images/borrowing_policies/3.gif" alt="None" width="18" height="18"> none' if attributes["#{category}#{level}"] == 3
+    return '<img src="/images/borrowing_policies/1.gif" alt="All" width="18" height="18"> all' if attributes["#{category}_#{level}"] == 1
+    return '<img src="/images/borrowing_policies/2.gif" alt="Some" width="18" height="18"> some' if attributes["#{category}_#{level}"] == 2
+    return '<img src="/images/borrowing_policies/3.gif" alt="None" width="18" height="18"> none' if attributes["#{category}_#{level}"] == 3
   end
   
   def borrowing_policies_html(category)
-    result = "<p>Admissions: #{borrowing_policy_html(category, 'Access')}. Borrowing: #{borrowing_policy_html(category, 'Borrowing')}.</p>"
-    result += Rack::Utils::escape_html(attributes["#{category}Notes"]) unless attributes["#{category}Notes"].blank?
+    result = "<p>Admissions: #{borrowing_policy_html(category, 'access')}. Borrowing: #{borrowing_policy_html(category, 'borrowing')}.</p>"
+    result += Rack::Utils::escape_html(attributes["#{category}_notes"]) unless attributes["#{category}_notes"].blank?
     result
   end
   
