@@ -15,6 +15,9 @@ class Library < ActiveRecord::Base
   default_scope { order('name').where(scheduled_for_deletion: false).includes(:opening_hours) }
   scope :with_opening_hours, -> { where("(vacation_hours IS NOT NULL AND vacation_hours <> '') OR (closed_periods IS NOT NULL AND closed_periods <> '') OR (hours_notes IS NOT NULL AND hours_notes <> '')") }
 
+  after_save :build_static_pages
+  # TODO: after_save :deploy_static_pages, if: :some_condition?
+
   attr_accessor :opening_hours_collection
 
   def opening_hours_collection=(value)
@@ -137,5 +140,15 @@ class Library < ActiveRecord::Base
 
   def covers_course?(course)
     (@preloaded_course_list ||= self.courses.all).include?(course)
+  end
+
+  # Builds static website (in preview mode) for this library
+  def build_static_pages
+    PageRenderer::build(self, binding())
+  end
+
+  # Deploys the current static preview to live
+  def deploy_static_pages
+    PageRenderer::deploy(self)
   end
 end

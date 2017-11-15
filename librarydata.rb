@@ -14,14 +14,14 @@ set :protection, :except => :frame_options # don't use X-Frame-Options to preven
 
 ########      Libraries      ########
 
-Dir.glob(File.join(File.dirname(__FILE__), 'lib', '*.rb')) do |model|
-  eval(IO.read(model), binding)
+Dir.glob(File.join(File.dirname(__FILE__), 'lib', '*.rb')) do |lib|
+  require lib
 end
 
 ########     Data models     ########
 
 Dir.glob(File.join(File.dirname(__FILE__), 'models', '*.rb')) do |model|
-  eval(IO.read(model), binding)
+  require model
 end
 
 ########    Authentication   ########

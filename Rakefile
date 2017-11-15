@@ -12,3 +12,17 @@ desc "Provides access to a console interface"
 task :console do
   sh 'irb', '-r', './librarydata.rb'
 end
+
+namespace :renderer do
+  desc "Builds previews of all library sites."
+  task :build do
+    require './librarydata.rb'
+    PageRenderer::build_all
+  end
+
+  desc "Deploys last previews of all library sites."
+  task :deploy do
+    require './librarydata.rb'
+    PageRenderer::deploy_all
+  end
+end
