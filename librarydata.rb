@@ -144,7 +144,7 @@ post '/libraries/:id/edit' do
         subject.destroy
       end
     elsif value == '1'
-      @library.library_subjects.find_or_create_by_subject_id(subject_id.to_i)
+      @library.library_subjects.find_or_create_by(subject_id: subject_id.to_i)
     end
   end
   # courses:
@@ -155,7 +155,7 @@ post '/libraries/:id/edit' do
           course.destroy
         end
       elsif value == '1'
-        @library.library_courses.find_or_create_by_course_id(course_id.to_i)
+        @library.library_courses.find_or_create_by(course_id: course_id.to_i)
       end
     end
   end
@@ -167,9 +167,9 @@ post '/libraries/:id/edit' do
   end
   # staff:
   @library.staffs.destroy_all
-  (params[:staff] || {})['JobTitle'].count.times do |i|
-    job_title, name_of_person = params[:staff]['JobTitle'][i], params[:staff]['NameOfPerson'][i]
-    @library.staffs.create(:JobTitle => job_title, :NameOfPerson => name_of_person, :ListOrder => (i + 1)) unless job_title.blank? || name_of_person.blank?
+  (params[:staff] || {})['job_title'].count.times do |i|
+    job_title, name_of_person = params[:staff]['job_title'][i], params[:staff]['name_of_person'][i]
+    @library.staffs.create(:job_title => job_title, :name_of_person => name_of_person, :list_order => (i + 1)) unless job_title.blank? || name_of_person.blank?
   end
   redirect to("/libraries/#{@library.id}/edit")
 end
@@ -268,7 +268,7 @@ post '/courses/:id' do
           library.destroy
         end
       elsif value == '1'
-        @course.library_courses.find_or_create_by_library_id(library_id.to_i)
+        @course.library_courses.find_or_create_by(library_id: library_id.to_i)
       end
     end
   end
