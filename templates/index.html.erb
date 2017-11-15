@@ -1,2 +1,14 @@
-<h1>hi</h1>
-<h2><%= name %></h2>
+<p>This is the website of <%= h name %>.</p>
+
+<address>
+  <%= [h(name), h(address), h(town_city), h(post_code)].map{|part| part.strip.gsub("\n", '<br />')}.reject{|part| part == ''}.join("\n<br />") %>
+</address>
+
+<% if social_links.any? %>
+  <p>Our social media:</p>
+  <ul>
+    <% social_links.each do |social_link| %>
+      <li><a href="<%= h social_link.auto_url %>"><%= h social_link.auto_url %></a></li>
+    <% end %>
+  </ul>
+<% end %>
