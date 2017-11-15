@@ -37,13 +37,13 @@ helpers do
   def library_edit_field_input(field, value = '', type = 'text', options = {})
     options = {:style => '', :class => '', :options => []}.merge(options)
     if type == 'textarea'
-      "<textarea name=\"library[#{field}]\" id=\"#{field}\" class=\"#{options[:class]}\" style=\"#{options[:style]}\" />#{h(value)}</textarea>"
+      "<textarea name=\"library[#{field}]\" id=\"#{field}\" class=\"ui-widget-content ui-corner-all #{options[:class]}\" style=\"#{options[:style]}\" />#{h(value)}</textarea>"
     elsif type == 'select'
-      "<select name=\"library[#{field}]\" id=\"#{field}\" class=\"#{options[:class]}\" style=\"#{options[:style]}\">" +
+      "<select name=\"library[#{field}]\" id=\"#{field}\" class=\"ui-widget-content ui-corner-all #{options[:class]}\" style=\"#{options[:style]}\">" +
         options[:options].collect{|o| "<option value=\"#{o[1]}\"#{' selected="selected"' if (value.to_s == o[1].to_s)}>#{o[0]}</option>"}.join +
       "</select>"
     else
-      "<input type=\"#{type}\" name=\"library[#{field}]\" id=\"#{field}\" value=\"#{h(value)}\" class=\"#{options[:class]}\" style=\"#{options[:style]}\" />"
+      "<input type=\"#{type}\" name=\"library[#{field}]\" id=\"#{field}\" value=\"#{h(value)}\" class=\"ui-widget-content ui-corner-all #{options[:class]}\" style=\"#{options[:style]}\" />"
     end
   end
 

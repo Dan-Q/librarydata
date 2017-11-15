@@ -5,30 +5,30 @@
   #tabs
     %ul
       %li
-        %a{type: '#tab_name'} Name
+        %a{href: '#tab_name'} Name
       %li
-        %a{type: '#tab_administration'} Administration
+        %a{href: '#tab_administration'} Administration
       %li
-        %a{type: '#tab_contact'} Contact
+        %a{href: '#tab_contact'} Contact
       %li
-        %a{type: '#tab_hours'} Hours
+        %a{href: '#tab_hours'} Hours
       %li
-        %a{type: '#tab_policies'} Policies
+        %a{href: '#tab_policies'} Policies
       %li
-        %a{type: '#tab_social'} Social
+        %a{href: '#tab_social'} Social
       %li
-        %a{type: '#tab_staff'} Staff
+        %a{href: '#tab_staff'} Staff
       %li
-        %a{type: '#tab_subjects'} Subjects
+        %a{href: '#tab_subjects'} Subjects
       - if @me.is_admin?
         %li
-          %a{type: '#tab_courses', class: 'admin'} Courses
+          %a{href: '#tab_courses', class: 'admin'} Courses
         %li
-          %a{type: '#tab_location', class: 'admin'} Location
+          %a{href: '#tab_location', class: 'admin'} Location
       %li
-        %a{type: '#tab_editors'} Editors
+        %a{href: '#tab_editors'} Editors
       %li
-        %a{type: '#tab_style'} Style Guidelines
+        %a{href: '#tab_style'} Style Guidelines
     
     #tab_name
       %p.field
@@ -80,7 +80,7 @@
         You may enter up to 500 characters in these fields. (This is roughly the length of a short paragraph.)
       %p.field
         Please see the
-        %a{type: '#tab_style', class: 'tablink'} style guidelines
+        %a{href: '#tab_style', class: 'tablink'} style guidelines
         for more tips.
     
       = library_edit_field(@library, 'term_hours', 'Term', type: 'textarea')
@@ -102,7 +102,7 @@
         You may enter up to 500 characters in these fields. (This is roughly the length of a short paragraph.)
       %p.field
         Please see the
-        %a{type: '#tab_style', class: 'tablink'} style guidelines
+        %a{href: '#tab_style', class: 'tablink'} style guidelines
         for more tips.
       
       %h3 Undergraduates        
@@ -139,24 +139,24 @@
           - @library.social_links.all.each do |social_link|
             %tr
               %td
-                %select{name: 'social_link[network][]'}
+                %select{class: 'ui-widget-content ui-corner-all', name: 'social_link[network][]'}
                   %option{value: ''}
                   - SocialLink::NETWORKS.each do |network|
                     %option{value: network[:code], :selected => (network[:code] == social_link.network), data: {username_okay: (network[:url_prefix] ? 'true' : 'false'), prefix: network[:username_prefix]}}= network[:name]
               %td
                 %span.field_prefix
-                %input{type: 'text', name: 'social_link[url][]', value: social_link.url}
+                %input{class: 'ui-widget-content ui-corner-all', type: 'text', name: 'social_link[url][]', value: social_link.url}
                 %small.field_desc
               %td.actions
           %tr.template{style: 'display: none;'}
             %td
-              %select{name: 'social_link[network][]'}
+              %select{class: 'ui-widget-content ui-corner-all', name: 'social_link[network][]'}
                 %option{value: ''}
                 - SocialLink::NETWORKS.each do |network|
                   %option{value: network[:code], data: {username_okay: (network[:url_prefix] ? 'true' : 'false'), prefix: network[:username_prefix]}}= network[:name]
             %td
               %span.field_prefix
-              %input{type: 'text', name: 'social_link[url][]'}
+              %input{class: 'ui-widget-content ui-corner-all', type: 'text', name: 'social_link[url][]'}
               %small.field_desc
             %td.actions
 
@@ -176,15 +176,15 @@
           - @library.staffs.all.each do |staff|
             %tr
               %td
-                %input{type: 'text', name: 'staff[job_title][]', value: staff.job_title}
+                %input{class: 'ui-widget-content ui-corner-all', type: 'text', name: 'staff[job_title][]', value: staff.job_title}
               %td
-                %input{type: 'text', name: 'staff[name_of_person][]', value: staff.name_of_person}
+                %input{class: 'ui-widget-content ui-corner-all', type: 'text', name: 'staff[name_of_person][]', value: staff.name_of_person}
               %td.actions
           %tr.template{style: 'display: none;'}
             %td
-              %input{type: 'text', name: 'staff[job_title][]'}
+              %input{class: 'ui-widget-content ui-corner-all', type: 'text', name: 'staff[job_title][]'}
             %td
-              %input{type: 'text', name: 'staff[name_of_person][]'}
+              %input{class: 'ui-widget-content ui-corner-all', type: 'text', name: 'staff[name_of_person][]'}
             %td.actions
 
     #tab_subjects
@@ -196,11 +196,11 @@
       %ul#subjects_list
         - Subject::all.each do |subject|
           %li
-            %input{type: 'hidden', name: "subject[#{subject.id}]", value: '0'}
+            %input{class: 'ui-widget-content ui-corner-all', type: 'hidden', name: "subject[#{subject.id}]", value: '0'}
             - if @library.covers_subject?(subject)
-              %input{type: 'checkbox', name: "subject[#{subject.id}]", id: "subject_#{subject.id}", value: '1', checked: 'checked'}
+              %input{class: 'ui-widget-content ui-corner-all', type: 'checkbox', name: "subject[#{subject.id}]", id: "subject_#{subject.id}", value: '1', checked: 'checked'}
             - else
-              %input{type: 'checkbox', name: "subject[#{subject.id}]", id: "subject_#{subject.id}", value: '1'}
+              %input{class: 'ui-widget-content ui-corner-all', type: 'checkbox', name: "subject[#{subject.id}]", id: "subject_#{subject.id}", value: '1'}
             %label{:for => "subject_#{subject.id}"}= h subject.subject
     
       %p.field{style: 'padding-top: 1em'}
@@ -216,11 +216,11 @@
         %ul#courses_list
           - Course::all.each do |course|
             %li
-              %input{type: 'hidden', name: "course[#{course.id}]", value: '0'}
+              %input{class: 'ui-widget-content ui-corner-all', type: 'hidden', name: "course[#{course.id}]", value: '0'}
               - if @library.covers_course?(course)
-                %input{type: 'checkbox', name: "course[#{course.id}]", id: "course_#{course.id}", value: '1', checked: 'checked'}
+                %input{class: 'ui-widget-content ui-corner-all', type: 'checkbox', name: "course[#{course.id}]", id: "course_#{course.id}", value: '1', checked: 'checked'}
               - else
-                %input{type: 'checkbox', name: "course[#{course.id}]", id: "course_#{course.id}", value: '1'}
+                %input{class: 'ui-widget-content ui-corner-all', type: 'checkbox', name: "course[#{course.id}]", id: "course_#{course.id}", value: '1'}
               %label{:for => "course_#{course.id}"}= h course.name
 
         %p.field
@@ -331,5 +331,5 @@
       %p Do not spell out
 
   %p
-    %input{type: 'submit', value: 'Save Changes', class: 'button'}
-    %input{type: 'button', 'data-href' => "/libraries/#{@library.id}", class: 'button', value: 'View Library'}
+    %input{class: 'ui-widget-content ui-corner-all', type: 'submit', value: 'Save Changes', class: 'button'}
+    %input{class: 'ui-widget-content ui-corner-all', type: 'button', 'data-href' => "/libraries/#{@library.id}", class: 'button', value: 'View Library'}
