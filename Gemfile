@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 gem "rake", "~> 12.2"
-gem "sinatra", "~> 2.0"
+gem "sinatra", "~> 2.0.1"
 gem "sinatra-activerecord", "~> 2.0"
 gem "thin", "~> 1.7"
 gem "geokit", "~> 1.11"
