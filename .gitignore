@@ -56,3 +56,6 @@ db/librarydata.db
 
 # Ignore static site builds
 public/libraries
+
+# Emacs
+*~

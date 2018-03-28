@@ -10,7 +10,7 @@ class Import < ActiveRecord::Migration[5.1]
     # export tables from sqlite
     FileUtils::mkdir('db/import') unless File::directory?('db/import')
     TABLES.each do |table|
-      `sqlite3 db/librarydata.db ".mode csv" ".output db/import/#{table}.csv" "SELECT * FROM #{table}"`
+      `echo -e ".mode csv\n.output db/import/#{table}.csv\nSELECT * FROM #{table};" | sqlite3 db/librarydata.db`
       `sed -Ei 's/[\\r\\n]+/,/g' db/import/#{table}.csv` # append a comma to each line; solves some import problems
     end
     # create new schema
