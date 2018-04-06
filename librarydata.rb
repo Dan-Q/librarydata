@@ -135,6 +135,12 @@ post '/libraries/:id/edit' do
   halt(404, "Library ##{id} not found.") unless @library = Library::find_by_id(id)
   halt(403, "Not logged in.") unless @me
   halt(403, "Not allowed to edit #{@library.name}.") unless @me.can_edit?(@library)
+  # If deleting, delete!
+  if @me.is_admin? && params['delete-library']
+    @library.destroy
+    redirect to("/libraries")
+    return
+  end
   # bulk update normal params
   @library.update_attributes(params[:library])
   # subjects:
@@ -171,7 +177,7 @@ post '/libraries/:id/edit' do
     job_title, name_of_person = params[:staff]['job_title'][i], params[:staff]['name_of_person'][i]
     @library.staffs.create(:job_title => job_title, :name_of_person => name_of_person, :list_order => (i + 1)) unless job_title.blank? || name_of_person.blank?
   end
-  redirect to("/libraries/#{@library.id}/edit")
+  redirect to("/libraries/#{@library.id}/edit##{params['current-tab']}")
 end
 
 get '/libraries/:id/social.?:format?' do
@@ -355,6 +361,7 @@ end
 get '/manage' do
   redirect to('/') unless @me && @me.is_admin?
   @users = User::order(:username).all
+  @libraries = Library::all
   @termdates = TermDate.all
   haml :manage
 end
@@ -383,7 +390,7 @@ post '/manage/users' do
       end
     end
   end
-  redirect to('/manage')
+  redirect to('/manage#tab_users')
 end
 
 post '/manage/users/add' do
@@ -399,7 +406,7 @@ post '/manage/users/add' do
       end
     end
   end
-  redirect to('/manage')
+  redirect to('/manage#tab_users')
 end
 
 post '/manage/termdates' do
@@ -412,6 +419,14 @@ post '/manage/termdates' do
       termdate.save if termdate.changed?
       termdate.destroy if(termdate_params['delete'].to_i == 1)
     end
+  end
+  redirect to('/manage#tab_termdates')
+end
+
+post '/manage/termdates/add' do
+  redirect to('/') unless @me && @me.is_admin? && params['termdate']
+  if(termdate_params = params['termdate'])
+    termdate = TermDate::create(name: termdate_params['name'], start_date: termdate_params['start_date'], end_date: termdate_params['end_date'])
   end
   redirect to('/manage#tab_termdates')
 end

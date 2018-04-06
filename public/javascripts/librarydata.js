@@ -1,5 +1,5 @@
 function staff_list_changed(){
-  if (($('table#staff_list tbody tr:not(.template):last input:text[value!=""]').length > 0) || ($('table#staff_list tbody tr:visible').length == 0)) {
+  if (($('table#staff_list tbody tr:not(.template):last').find('input, select').val() != '') || ($('table#staff_list tbody tr:visible').length == 0)) {
     $('table#staff_list tbody tr.template').clone().removeClass('template').css('display', '').appendTo($('table#staff_list tbody'));
   }
   // insert up/down/delete links
@@ -16,7 +16,7 @@ function staff_list_changed(){
 
 function social_links_list_changed(){
   // if text in last row OR no visible rows, add ANOTHER last row
-  if (($('table#social_links_list tbody tr:not(.template):last input:text[value!=""]').length > 0) || ($('table#social_links_list tbody tr:visible').length == 0)) {
+  if (($('table#social_links_list tbody tr:not(.template):last').find('input, select').val() != '') || ($('table#social_links_list tbody tr:visible').length == 0)) {
     $('table#social_links_list tbody tr.template').clone().removeClass('template').css('display', '').appendTo($('table#social_links_list tbody'));
   }
   // insert up/down/delete links
@@ -40,10 +40,32 @@ function social_links_list_changed(){
   });
 }
 
+function delete_empty_rows_from(table_rows){
+  table_rows = $(table_rows);
+  empty_rows = table_rows.filter(function(){
+    fields = $(this).find('input:not(:hidden), select, textarea');
+    empty_fields = fields.filter(function(){
+      return($(this).val() == '');
+    });
+    row_is_empty = (fields.length == empty_fields.length);
+    console.log(row_is_empty);
+    return(row_is_empty);
+  });
+  empty_rows.remove();
+}
+
 $(function(){
   // tabs
-  $('#tabs').tabs();
+  $('#tabs').tabs({
+    activate: function(event, ui){
+      // when selecting a tab, mark it in any containing form, if possible
+      new_hash = ui.newTab.find('a').attr('href');
+      window.location.hash = new_hash;
+      $(this).closest('form').find('input[name="current-tab"]').val(new_hash.replace(/^#/,''));
+    }
+  });
   $('#tabs a[href^="' + window.location.hash + '"]').click()
+  $('input[name="current-tab"]').val(window.location.hash.replace(/^#/,''))
 
   // buttons
   $('.button').button();
@@ -65,13 +87,10 @@ $(function(){
   
   // staff list
   $('table#staff_list').on('change keyup', 'input', staff_list_changed);
-  $('table#staff_list').on('blur', 'input:not(.template)', function(){
+  $('table#staff_list').on('blur', 'input, select, textarea', function(){
     // delete empty rows on blur
-    var tr = $(this).closest('tr');
-    if (tr.find('input:text[value!=""]').length == 0) {
-      tr.remove();
-      staff_list_changed(); // in case we just removed trailing blank row, re-add
-    }
+    delete_empty_rows_from('table#staff_list tbody tr:not(.template)');
+    staff_list_changed(); // in case we just removed trailing blank row, re-add
   });
   $('table#staff_list').on('click', '.up_link', function(){
     var this_row = $(this).closest('tr');
@@ -94,13 +113,10 @@ $(function(){
 
   // social links list
   $('table#social_links_list').on('change keyup', 'input, select', social_links_list_changed);
-  $('table#social_links_list').on('blur', 'input:not(.template)', function(){
+  $('table#social_links_list').on('blur', 'input, select, textarea', function(){
     // delete empty rows on blur
-    var tr = $(this).closest('tr');
-    if (tr.find('input:text[value!=""]').length == 0) {
-      tr.remove();
-      social_links_list_changed(); // in case we just removed trailing blank row, re-add
-    }
+    delete_empty_rows_from('table#social_links_list tbody tr:not(.template)');
+    social_links_list_changed(); // in case we just removed trailing blank row, re-add
   });
   $('table#social_links_list').on('click', '.up_link', function(){
     var this_row = $(this).closest('tr');

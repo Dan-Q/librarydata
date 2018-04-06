@@ -7,7 +7,9 @@
     %li
       %a{href: '#tab_adduser'} Add User
     %li
-      %a{href: '#tab_termdates'} Dates of Term
+      %a{href: '#tab_termdates'} Terms
+    %li
+      %a{href: '#tab_addtermdates'} Add Term
 
   #tab_users
     %form{action: '/manage/users', method: 'post'}
@@ -26,7 +28,7 @@
               %td
                 %input{type: 'password', name: "user[#{user.id}][temporary_password]", value: user.temporary_password}
               %td
-                %input{type: 'text', name: "user[#{user.id}][library_ids]", value: (user.is_admin? ? 'super' : user.libraries.collect(&:id).join(','))}
+                %input{type: 'text', name: "user[#{user.id}][library_ids]", class: 'user-libraries', value: (user.is_admin? ? 'super' : user.libraries.collect(&:id).join(','))}
               %td
                 %input{type: 'checkbox', name: "user[#{user.id}][delete]", value: '1'}
       %p
@@ -74,3 +76,38 @@
       %p
         %input{type: 'submit', value: 'Save Changes'}
 
+  #tab_addtermdates
+    %form{action: '/manage/termdates/add', method: 'post'}
+      %table
+        %thead
+          %tr
+            %th Name
+            %th Start
+            %th End
+        %tbody
+          %tr
+            %td
+              %input{type: 'text', name: "termdate[name]"}
+            %td
+              %input{type: 'date', name: "termdate[start_date]"}
+            %td
+              %input{type: 'date', name: "termdate[end_date]"}
+      %p
+        %input{type: 'submit', value: 'Save Changes'}
+
+
+:coffeescript
+  $ ->
+    libraries = #{@libraries.map{|l|{ label: l.name, value: l.id }}.to_json}
+
+    $('.user-libraries').autocomplete
+      minLength: 0
+      source: (request, response)->
+        response $.ui.autocomplete.filter(libraries, request.term.split(/,\s*/).pop())
+      select: (event, ui)->
+        terms = this.value.split(/,\s*/)
+        terms.pop()
+        terms.push(ui.item.value)
+        terms.push("")
+        this.value = terms.join(", ")
+        false

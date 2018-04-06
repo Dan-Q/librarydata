@@ -2,6 +2,8 @@
   %a{name: "L#{@library.id}"}= h "Edit #{@library.name}"
 
 %form{method: 'post', action: "/libraries/#{@library.id}/edit"}
+  %input{type: 'hidden', name: 'current-tab'}
+
   #tabs
     %ul
       %li
@@ -29,11 +31,17 @@
         %a{href: '#tab_editors'} Editors
       %li
         %a{href: '#tab_style'} Style Guidelines
+      - if @me.is_admin?
+        %li
+          %a{href: '#tab_delete', class: 'admin'} Delete
     
     #tab_name
       %p.field
-        %label{:for => 'library_name'} Name:
-        %span.input= h @library.name
+        - if @me.is_admin?
+          = library_edit_field(@library, 'name', 'Name')
+        - else
+          %label{:for => 'library_name'} Name:
+          %span.input= h @library.name
       %p.field
         %label{:for => 'library_site_name'} Site:
         %span.input
@@ -329,6 +337,12 @@
 
       %h3 Numbers
       %p Do not spell out
+
+    #tab_delete
+      %p
+        Delete this library from the database?
+      %p
+        %input{class: 'ui-widget-content ui-corner-all', type: 'submit', name: 'delete-library', value: 'Delete', class: 'button'}
 
   %p
     %input{class: 'ui-widget-content ui-corner-all', type: 'submit', value: 'Save Changes', class: 'button'}
