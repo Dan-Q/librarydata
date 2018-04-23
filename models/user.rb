@@ -10,13 +10,18 @@ class User < ActiveRecord::Base
 
   def self.login(username, password)
     return false unless user = find_by_username(username)
-    return user if user.password == password
-    return user if user.temporary_password == password
+    return user if user.password && (user.password == password)
+    return user if !user.temporary_password.blank? && (user.temporary_password == password)
     false
   end
   
   def password
-    @password ||= Password.new(hashed_password)
+    begin
+      @password ||= Password.new(hashed_password)
+    rescue BCrypt::Errors::InvalidHash
+      # this occurs when no password is set (perhaps just a temporary password) - return nil
+      nil
+    end
   end
 
   def password=(new_password)

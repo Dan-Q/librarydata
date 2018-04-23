@@ -321,12 +321,12 @@ get '/social/list' do
       i.html
     elsif i.is_a?(Library)
       social_links = i.social_links.reject{|sl|sl.network == 'rss'}.sort_by(&:network).collect{|sl| sl.auto_link(nil, {:class => '', :title => ''}, true)}.join(' | ')
-      if (i.Name == 'Bodleian Library - New Library') || (i.Name == 'Bodleian Library - Weston Library')
+      if (i.name == 'Bodleian Library - New Library') || (i.name == 'Bodleian Library - Weston Library')
         "Bodleian Libraries #{social_links}"
-      elsif (i.Name == 'Bodleian Library - Old Library') || (i.Name == 'Bodleian Library - Radcliffe Camera')
+      elsif (i.name == 'Bodleian Library - Old Library') || (i.name == 'Bodleian Library - Radcliffe Camera')
         nil
       else
-        "#{i.Name} #{social_links}"
+        "#{i.name} #{social_links}"
       end
     end
   }.reject(&:nil?).sort_by{|i|i.upcase}

@@ -75,5 +75,16 @@
 
 = haml File::read('views/_library_list.haml')
 
+:javascript
+  $(function(){
+    if(window.location.host == 'www.bodleian.ox.ac.uk'){
+      $('.library-list .library a.information').each(function(){
+        var library = $(this).closest("[data-class='Library'");
+        var newurl = '/subjects-and-libraries/libraries?id='+library.data('id');
+        if(library.data('site')){ newurl += '&site'; }
+        $(this).attr('href', newurl);
+      });
+    }
+  });
 = "<!--new cms end-->"
 = "<!--cms end-->"

@@ -70,15 +70,15 @@
     = h("#{@next.name} starts on #{@next.start_date.strftime('%-d %B %Y')}.") if @next
 
 #auto_anchor_links{'data-auto-anchor-links' => 'h2'}
-#largelist
+#largelist.library-list
   - @letters.each do |letter|
     %h2.index_letter= letter
 
     - @libraries.select{|l| l.name[0,1] == letter}.each do |library|
-      .groupsection
+      .groupsection.library{:data => { :class => library.class.name, :id => library.id }}
         %h3.library_name= h library.name
         .library_links
-          %a{:href => library.url} Information
+          %a.information{:href => library.url} Information
           - unless library.website.blank?
             |
             %a{:href => no_quotes(library.website)} Website
@@ -103,5 +103,16 @@
     -# %p{:style => 'text-align: right; clear: both;'}
     -#   %a{:href => '#top'} Back to top
 
+:javascript
+  $(function(){
+    if(window.location.host == 'www.bodleian.ox.ac.uk'){
+      $('.library-list .library a.information').each(function(){
+        var library = $(this).closest("[data-class='Library'");
+        var newurl = '/subjects-and-libraries/libraries?id='+library.data('id');
+        if(library.data('site')){ newurl += '&site'; }
+        $(this).attr('href', newurl);
+      });
+    }
+  });
 = "<!--new cms end-->"
 = "<!--cms end-->"
