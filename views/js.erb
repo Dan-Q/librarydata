@@ -6,7 +6,7 @@ $(function(){
      <% oxpoints_codes = @libraries.map{|l| "oxpoints:#{l.oxpoints_id}" }.join(',') %>
     $('#library_map, #junk-id-goes-here').each(function(){
       $(this).css({ position: 'absolute' }); // allow .iframe-overlay to "overlay" the iframe and catch clicks
-      $(this).html('<iframe src="//maps.ox.ac.uk/embed.html#/custom?ids=<%= oxpoints_codes %>&fullscreen" frameborder="0" scrolling="no" style="height: 100%; width: 100%;"></iframe><a href="//maps.ox.ac.uk/embed.html#/custom?ids=<%= oxpoints_codes %>" class="iframe-overlay" style="display: block; position: absolute; top: 0; width: 100%; height: 100%;"></div>');
+      $(this).html('<iframe src="//maps.ox.ac.uk/embed.html#/custom?ids=<%= oxpoints_codes %>&fullscreen" frameborder="0" scrolling="no" style="height: 100%; width: 100%;"></iframe><a href="//maps.ox.ac.uk/embed.html#/custom?ids=<%= oxpoints_codes %>" class="iframe-overlay" style="display: block; position: absolute; top: 0; width: 38px; height: 35px;"></div>');
     });
   <% else %>
     function drawLibraryMap(element){
