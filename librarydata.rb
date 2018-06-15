@@ -358,6 +358,12 @@ post '/social/add' do
   redirect to('/social')
 end
 
+get '/directory' do
+  redirect to('/') unless @me && @me.is_staff_directory_admin?
+  @entries = DirectoryEntry.order(:surname, :forename).all
+  haml :directory
+end
+
 get '/manage' do
   redirect to('/') unless @me && @me.is_admin?
   @users = User::order(:username).all
@@ -384,6 +390,7 @@ post '/manage/users' do
           end
         end
       end
+      user.is_staff_directory_admin = (user_params['is_staff_directory_admin'].to_i == 1)
       user.save if user.changed?
       if(user_params['delete'].to_i == 1)
         user.destroy

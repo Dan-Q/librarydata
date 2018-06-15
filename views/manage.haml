@@ -19,6 +19,7 @@
             %th Username
             %th Password
             %th Libraries
+            %th Staff Directory Admin?
             %th Delete
         %tbody
           - @users.each do |user|
@@ -29,6 +30,8 @@
                 %input{type: 'password', name: "user[#{user.id}][temporary_password]", value: user.temporary_password}
               %td
                 %input{type: 'text', name: "user[#{user.id}][library_ids]", class: 'user-libraries', value: (user.is_admin? ? 'super' : user.libraries.collect(&:id).join(','))}
+              %td
+                %input{type: 'checkbox', name: "user[#{user.id}][is_staff_directory_admin]", value: '1', checked: user.is_staff_directory_admin? }
               %td
                 %input{type: 'checkbox', name: "user[#{user.id}][delete]", value: '1'}
       %p

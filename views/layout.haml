@@ -22,6 +22,9 @@
           |
           %a{:href => '/social'} social
           |
+        - if @me.is_staff_directory_admin?
+          %a{:href => '/directory'} directory
+          |
         %a{:href => '/logout'} log out
       - else
         not logged in

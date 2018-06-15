@@ -1,0 +1,57 @@
+%h2.title Staff Directory
+
+%p
+  This
+  %strong experimental
+  feature is not yet in use!
+
+#tabs
+  %ul
+    %li
+      %a{href: '#tab_entries'} Staff Directory
+    %li
+      %a{href: '#tab_addentry'} Add Staff Member
+
+  #tab_entries
+    %form{action: '/directory/entries', method: 'post'}
+      %table
+        %thead
+          %tr
+            %th Surname
+            %th Forename
+            %th Known As
+            %th Delete
+        %tbody
+          - @entries.each do |entry|
+            %tr
+              %td
+                %input{type: 'text', name: "entry[#{entry.id}][surname]", value: entry.surname}
+              %td
+                %input{type: 'text', name: "entry[#{entry.id}][forename]", value: entry.forename}
+              %td
+                %input{type: 'text', name: "entry[#{entry.id}][known_as]", value: entry.known_as}
+              %td
+                %input{type: 'checkbox', name: "entry[#{entry.id}][delete]", value: '1'}
+      %p
+        %input{type: 'submit', value: 'Save Changes'}
+
+  #tab_addentry
+    %form{action: '/directory/entries/add', method: 'post'}
+      %table
+        %thead
+          %tr
+            %th Surname
+            %th Forename
+            %th Known As
+        %tbody
+          %tr
+            %td
+              %input{type: 'text', name: "entry[surname]"}
+            %td
+              %input{type: 'text', name: "entry[forename]"}
+            %td
+              %input{type: 'text', name: "entry[known_as]"}
+            %td
+              %input{type: 'text', name: "entry[library_ids]"}
+      %p
+        %input{type: 'submit', value: 'Save Changes'}
