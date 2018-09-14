@@ -48,7 +48,7 @@ function delete_empty_rows_from(table_rows){
       return($(this).val() == '');
     });
     row_is_empty = (fields.length == empty_fields.length);
-    console.log(row_is_empty);
+    //console.log(row_is_empty);
     return(row_is_empty);
   });
   empty_rows.remove();
@@ -139,7 +139,7 @@ $(function(){
 
   // if hash, select appropriate tab
   if(window.location.hash != '') {
-    $('a[href=#tab_' + window.location.hash.substring(1,window.location.hash.length) + ']').click();
+    $('a[href="#tab_' + window.location.hash.substring(1,window.location.hash.length) + '"]').click();
   }
 
   // opening hours table
@@ -162,4 +162,79 @@ $(function(){
     }
     return false;
   });
+
+  // Staff Directory
+
+  function setUpStaffDirectoryArrayField(td){
+    var id = td.closest('.directory-entry').data('id');
+    var field = td.attr('id');
+    var input_name = 'entry[' + id + '][' + field + ']';
+    var input = td.find('input[name="' + input_name + '"]');
+    var json_value = JSON.parse(input.val()) || [];
+    var array_of = td.data('arrayof');
+    //console.log(json_value);
+    td.append('<ul></ul>');
+    var ul = td.find('ul');
+    json_value.forEach(function(value){
+      if(array_of == 'textarea') {
+        ul.append('<li><textarea class="virtual-field" /></li>');
+      } else {
+        ul.append('<li><input type="' + array_of + '" class="virtual-field" /></li>');
+      }
+      ul.find('.virtual-field:last').val(value);
+    });
+    // add an empty one at the end in case they want to append to the array
+    if(array_of == 'textarea') {
+      ul.append('<li><textarea class="virtual-field" /></li>');
+    } else {
+      ul.append('<li><input type="' + array_of + '" class="virtual-field" /></li>');
+    }
+    td.on('keyup change', '.virtual-field', function(){ changedStaffDirectoryArrayField(td); });
+  }
+
+  function changedStaffDirectoryArrayField(td){
+    var id = td.closest('.directory-entry').data('id');
+    var field = td.attr('id');
+    var input_name = 'entry[' + id + '][' + field + ']';
+    var input = td.find('input[name="' + input_name + '"]');
+    var array_of = td.data('arrayof');
+    var ul = td.find('ul');
+    // update JSON
+    var field_values = td.find('.virtual-field').filter(function(){ return($(this).val().trim() != ''); }).map(function(){ return($(this).val()); }).toArray();
+    input.val(JSON.stringify(field_values));
+    // remove excessive blanks
+    var blank_fields = td.find('.virtual-field').filter(function(){ return($(this).val().trim() == ''); });
+    blank_fields.splice(1).forEach(function(field){ $(field).closest('li').remove() });
+    // ensure one blank
+    if(blank_fields.length == 0){
+      if(array_of == 'textarea') {
+        ul.append('<li><textarea class="virtual-field" /></li>');
+      } else {
+        ul.append('<li><input type="' + array_of + '" class="virtual-field" /></li>');
+      }
+    }
+  }
+
+  $('#staff_directory #tab_entries .directory-entry').on('click', '.dir-field:not(.editing)', function(){
+    var id = $(this).closest('.directory-entry').data('id');
+    var field = $(this).attr('id');
+    var value = $(this).data('value');
+    var input_name = 'entry[' + id + '][' + field + ']';
+    $(this).addClass('editing');
+    if($(this).hasClass('text')) {
+      $(this).html('<p><input type="text" name="' + input_name + '" /></p>');
+      var input = $(this).find('input[name="' + input_name + '"]');
+      input.val(value);
+      input.focus();
+      input.select();
+    } else if($(this).hasClass('json-array')) {
+      $(this).html('<input type="hidden" name="' + input_name + '" />');
+      var input = $(this).find('input[name="' + input_name + '"]');
+      input.val(JSON.stringify(value));
+      setUpStaffDirectoryArrayField($(this));
+    } else {
+      alert("don't know how to handle " + id + "#" + field);
+    }
+  })
+
 });

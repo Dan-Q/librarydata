@@ -1,72 +1,48 @@
 = "<!--cms start-->"
 
 #library
-  %h2= h @library.Name
+  %h2= h @library.name
 
-  - unless [@library.TermHours, @library.VacationHours].all?(&:blank?)
+  - unless [@library.term_hours, @library.vacation_hours].all?(&:blank?)
     .section#opening
-      - unless @library.TermHours.blank?
+      - unless @library.term_hours.blank?
         .label Term:
-        .value= h(@library.TermHours)
+        .value= h(@library.term_hours)
 
-      - unless @library.VacationHours.blank?
+      - unless @library.vacation_hours.blank?
         .label Vacation:
-        .value= h(@library.VacationHours)
+        .value= h(@library.vacation_hours)
 
-  - unless [@library.Telephone, @library.Fax, @library.Email, @library.Website].all?(&:blank?)
+  - unless [@library.telephone, @library.email, @library.website].all?(&:blank?)
     .section#contact
-      - unless @library.Email.blank?
+      - unless @library.email.blank?
         .label Email:
         .value
-          %a{:href => no_quotes("mailto:#{@library.Email}")}= h(@library.Email)
+          %a{:href => no_quotes("mailto:#{@library.email}")}= h(@library.email)
 
-      - unless @library.Telephone.blank?
+      - unless @library.telephone.blank?
         .label Telephone:
         .value
-          %a{:href => no_quotes("tel:#{@library.Telephone}")}= h(@library.Telephone)
+          %a{:href => no_quotes("tel:#{@library.telephone}")}= h(@library.telephone)
 
-      - unless @library.Website.blank?
+      - unless @library.website.blank?
         .label Website:
         .value
-          %a{:href => no_quotes(@library.Website)}= h(@library.Website.gsub(/^https?:\/\//, '').gsub(/\/$/, ''))
+          %a{:href => no_quotes(@library.website)}= h(@library.website.gsub(/^https?:\/\//, '').gsub(/\/$/, ''))
 
   .section#address
     .label Address:
     .value= @library.address_lines.collect{|a|h(a)}.join(', ')
 
-  .section
-    %p
-      - # %small For directions to this library, click inside the map.
+  .section{style: 'position: relative; height: 200px; padding: 0;'}
     #library_map.mobile{:style => 'width: 100%; height: 200px;'}
 
-  - unless [@library.Facebook, @library.Twitter].all?(&:blank?)
-    .section#social_media
-      - unless @library.Facebook.blank?
-        .label Facebook:
-        .value
-          %a{:href => no_quotes(@library.Facebook)}= h @library.Facebook.gsub(/^https?:\/\//, '').gsub(/\/$/, '')
+  .section#social_media
+    - @library.social_links.each do |social_link|
+      .label= h(social_link.network_name)
+      .value
+        %a{href: social_link.auto_url}= social_link.auto_url
 
-      - unless @library.Twitter.blank?
-        .label Twitter:
-        .value
-          %a{:href => no_quotes("http://twitter.com/#{h(@library.Twitter)}")}= h "@#{@library.Twitter}"
-
-      - unless @library.Blog.blank?
-        .label Blog:
-        .value
-          %a{:href => no_quotes(@library.Blog)}= h @library.Blog.gsub(/^https?:\/\//, '').gsub(/\/$/, '')
-
-      - unless @library.LibraryThing.blank?
-        .label LibraryThing:
-        .value
-          %a{:href => no_quotes(@library.LibraryThing)}= h @library.LibraryThing.gsub(/^https?:\/\//, '').gsub(/\/$/, '')
-
-      - unless @library.Delicious.blank?
-        .label Delicious:
-        .value
-          %a{:href => no_quotes(@library.Delicious)}= h @library.Delicious.gsub(/^https?:\/\//, '').gsub(/\/$/, '')
-
-  %script{:src => '//maps.googleapis.com/maps/api/js?key=AIzaSyBtgxMIN-8j798f7NPvuaTQa_nVf5i9WWQ&sensor=true', :type => 'text/javascript'}
   %script{:src => "/libraries/#{@library.id}.js", :type => 'text/javascript'}
 
 = "<!--cms end-->"

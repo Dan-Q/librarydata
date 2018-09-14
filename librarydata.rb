@@ -192,6 +192,12 @@ get '/libraries/:id/social.?:format?' do
   end
 end
 
+post '/libraries/add' do
+  halt 403 unless @me.is_admin?
+  library = Library.create(name: params[:name])
+  redirect to("/libraries/#{library.id}/edit")
+end
+
 get '/opening-hours.?:format?' do
   format = get_format([], 'html')
   redirect to("/libraries.#{format}") and return unless format == 'html'
@@ -362,6 +368,27 @@ get '/directory' do
   redirect to('/') unless @me && @me.is_staff_directory_admin?
   @entries = DirectoryEntry.order(:surname, :forename).all
   haml :directory
+end
+
+post '/directory/entries' do
+  redirect to('/') unless @me && @me.is_staff_directory_admin?
+  DirectoryEntry.order(:surname, :forename).all.each do |entry|
+    if (entry_params = params['entry'][entry.id.to_s])
+      if(entry_params['delete'].to_i == 1)
+        entry.destroy
+      else
+        %w{email_addresses phone_numbers addresses workplaces}.select{|p| entry_params[p] }.each{|p| entry_params[p] = JSON.parse(entry_params[p]) } # translate JSON
+        entry.update_attributes(params['entry'][entry.id.to_s])
+      end
+    end
+  end
+  redirect to('/directory#entries')
+end
+
+post '/directory/entries/add' do
+  redirect to('/') unless @me && @me.is_staff_directory_admin?
+  new_entry = DirectoryEntry.create(params['entry'])
+  redirect to("/directory?highlight=#{new_entry.id}#entries")
 end
 
 get '/manage' do

@@ -10,6 +10,8 @@
       %a{href: '#tab_termdates'} Terms
     %li
       %a{href: '#tab_addtermdates'} Add Term
+    %li
+      %a{href: '#tab_addlibrary'} Add Library
 
   #tab_users
     %form{action: '/manage/users', method: 'post'}
@@ -98,6 +100,13 @@
       %p
         %input{type: 'submit', value: 'Save Changes'}
 
+  #tab_addlibrary
+    %form{action: '/libraries/add', method: 'post'}
+      %p
+        Name: 
+        %input{type: 'text', name: 'name'}
+      %p
+        %input{type: 'submit', value: 'Add Library'}
 
 :coffeescript
   $ ->

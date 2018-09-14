@@ -1,57 +1,91 @@
 %h2.title Staff Directory
 
-%p
-  This
-  %strong experimental
-  feature is not yet in use!
+#staff_directory
 
-#tabs
-  %ul
-    %li
-      %a{href: '#tab_entries'} Staff Directory
-    %li
-      %a{href: '#tab_addentry'} Add Staff Member
+  %p
+    This
+    %strong experimental
+    feature is not yet in use!
 
-  #tab_entries
-    %form{action: '/directory/entries', method: 'post'}
-      %table
-        %thead
-          %tr
-            %th Surname
-            %th Forename
-            %th Known As
-            %th Delete
-        %tbody
-          - @entries.each do |entry|
+  #tabs
+    %ul
+      %li
+        %a{href: '#tab_entries'} Staff Directory
+      %li
+        %a{href: '#tab_addentry'} Add Staff Member
+
+    #tab_entries
+      %form{action: '/directory/entries', method: 'post'}
+        %p Click on the data you'd like to edit. Save buttons are at the top and bottom (press Home/End key to jump).
+
+        %p
+          %input{type: 'submit', value: 'Save Changes'}
+
+        %table
+          %thead
+            %tr
+              %th Surname
+              %th Forename
+              %th Known As
+              %th Job Title
+              %th Email Addresses
+              %th Phone Numbers
+              %th Workplaces
+              %th Addresses
+              %th Delete
+          %tbody
+            - @entries.each do |entry|
+              %tr.directory-entry{data: { id: entry.id }, class: ('highlight' if params['highlight'].to_i == entry.id)}
+                %td.dir-field.text#surname{data: { value: entry.surname }}
+                  %p= h entry.surname
+                %td.dir-field.text#forename{data: { value: entry.forename }}
+                  %p= h entry.forename
+                %td.dir-field.text#known_as{data: { value: entry.known_as }}
+                  %p= h entry.known_as
+                %td.dir-field.text#job_title{data: { value: entry.job_title }}
+                  %p= h entry.job_title
+                %td.dir-field.json-array#email_addresses{data: { value: entry.email_addresses.to_json.strip, arrayof: 'text' }}
+                  %ul
+                    - (entry.email_addresses || []).each do |email_address|
+                      %li= h email_address
+                %td.dir-field.json-array#phone_numbers{data: { value: entry.phone_numbers.to_json.strip, arrayof: 'text' }}
+                  %ul
+                    - (entry.phone_numbers || []).each do |phone_number|
+                      %li= h phone_number
+                %td.dir-field.json-array#workplaces{data: { value: entry.workplaces.to_json.strip, arrayof: 'text' }}
+                  %ul
+                    - (entry.workplaces || []).each do |workplace|
+                      %li= h workplace
+                %td.dir-field.json-array#addresses{data: { value: entry.addresses.to_json.strip, arrayof: 'textarea' }}
+                  %ul
+                    - (entry.addresses || []).each do |address|
+                      %li= h(address).gsub("\n", '<br />')
+                %td
+                  %input{type: 'checkbox', name: "entry[#{entry.id}][delete]", value: '1'}
+        %p
+          %input{type: 'submit', value: 'Save Changes'}
+
+    #tab_addentry
+      %form{action: '/directory/entries/add', method: 'post'}
+        %p
+          Add a new staff member to the Directory (you can add email addresses, phone numbers etc. later, via the main Directory).
+
+        %table
+          %thead
+            %tr
+              %th Surname
+              %th Forename
+              %th Known As
+              %th Job Title
+          %tbody
             %tr
               %td
-                %input{type: 'text', name: "entry[#{entry.id}][surname]", value: entry.surname}
+                %input{type: 'text', name: "entry[surname]"}
               %td
-                %input{type: 'text', name: "entry[#{entry.id}][forename]", value: entry.forename}
+                %input{type: 'text', name: "entry[forename]"}
               %td
-                %input{type: 'text', name: "entry[#{entry.id}][known_as]", value: entry.known_as}
+                %input{type: 'text', name: "entry[known_as]"}
               %td
-                %input{type: 'checkbox', name: "entry[#{entry.id}][delete]", value: '1'}
-      %p
-        %input{type: 'submit', value: 'Save Changes'}
-
-  #tab_addentry
-    %form{action: '/directory/entries/add', method: 'post'}
-      %table
-        %thead
-          %tr
-            %th Surname
-            %th Forename
-            %th Known As
-        %tbody
-          %tr
-            %td
-              %input{type: 'text', name: "entry[surname]"}
-            %td
-              %input{type: 'text', name: "entry[forename]"}
-            %td
-              %input{type: 'text', name: "entry[known_as]"}
-            %td
-              %input{type: 'text', name: "entry[library_ids]"}
-      %p
-        %input{type: 'submit', value: 'Save Changes'}
+                %input{type: 'text', name: "entry[job_title]"}
+        %p
+          %input{type: 'submit', value: 'Save Changes'}

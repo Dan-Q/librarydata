@@ -100,3 +100,18 @@ table th, table td {
 table td {
   border-top: 1px solid #777;
 }
+
+table tr.highlight {
+  background: #ff9;
+}
+
+/* Staff Directory  */
+
+#staff_directory table ul {
+  padding: 0;
+  list-style: none;
+}
+
+#staff_directory table ul li {
+  margin-top: 1em;
+}

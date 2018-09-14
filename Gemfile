@@ -15,3 +15,6 @@ gem "mysql2", "~> 0.4.9"
 gem "standalone_migrations", "~> 5.2"
 gem "rerun", "~> 0.11.0"
 gem "therubyracer", "~> 0.12.3"
+
+# Added at 2018-07-13 11:29:50 +0100 by bodl2255:
+gem "shotgun", "~> 0.9.2"

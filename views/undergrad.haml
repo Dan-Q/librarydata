@@ -32,10 +32,10 @@
 
     #undergrad_widget_result{'data-role' => 'controlgroup'}
       - @colleges.select{|c| c.library}.each do |college|
-        %a{:href => "/libraries/#{college.library.id}.mobile", :class => "result college#{college.id}", 'data-role' => 'button'}= h(college.library.Name)
+        %a{:href => "/libraries/#{college.library.id}.mobile", :class => "result college#{college.id}", 'data-role' => 'button'}= h(college.library.name)
       - @courses.each do |course|
         - course.libraries.each do |library|
-          %a{:href => "/libraries/#{library.id}.mobile", :class => "result course#{course.id}", 'data-role' => 'button'}= h(library.Name)
+          %a{:href => "/libraries/#{library.id}.mobile", :class => "result course#{course.id}", 'data-role' => 'button'}= h(library.name)
 
     %div
       %a#undergrad_widget_reset{:href => '#', 'data-role' => 'button'} Back

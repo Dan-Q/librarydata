@@ -25,7 +25,7 @@ class SocialLink < ActiveRecord::Base
     { name: 'RSS',                      code: 'rss' },
     { name: 'Slideshare',               code: 'slideshare' },
     { name: 'SoundCloud',               code: 'soundcloud' },
-    { name: 'Tumblr',                   code: 'tumblr',      url_prefix: 'http//', url_suffix: '.tumblr.com/' },
+    { name: 'Tumblr',                   code: 'tumblr',      url_prefix: 'http://', url_suffix: '.tumblr.com/' },
     { name: 'Twitter',                  code: 'twitter',     url_prefix: 'https://twitter.com/',        username_prefix: '@' },
     { name: 'Vimeo',                    code: 'vimeo' },
     { name: 'Wikipedia',                code: 'wikipedia' },

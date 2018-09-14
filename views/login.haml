@@ -6,21 +6,16 @@
 %p
   Please log in to edit library data.
 
-%form{:method => 'post', :action => '/login', :id => 'login_form'}
-  %input{:type => 'hidden', :name => 'return_to', :value => @return_to || params[:return_to]}
+%form{method: 'post', action: '/login', id: 'login_form'}
+  %input{type: 'hidden', name: 'return_to', value: @return_to || params[:return_to]}
 
   %p.field
-    %label{:for => 'username'} Username:
-    %input#username{:type => 'text', :name => 'username', :value => params[:username]}
+    %label{for: 'username'} Username:
+    %input#username{type: 'text', name: 'username', value: params[:username], autofocus: 'autofocus'}
     
   %p.field
-    %label{:for => 'password'} Password:
-    %input#password{:type => 'password', :name => 'password'}
+    %label{for: 'password'} Password:
+    %input#password{type: 'password', name: 'password'}
     
   %p.buttons
-    %input{:type => 'submit', :value => 'Log In'}
-
-:javascript
-  $(function(){
-    $("input:visible[value='']:first").focus();
-  });
+    %input{type: 'submit', value: 'Log In'}
